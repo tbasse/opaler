@@ -1,0 +1,13 @@
+{
+  "name": "opal",
+  "version": "0.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.17.0",
+    "eyes": "^0.1.8",
+    "q": "^1.0.1",
+    "request": "^2.37.0"
+  }
+}
