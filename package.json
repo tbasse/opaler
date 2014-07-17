@@ -9,5 +9,9 @@
     "eyes": "^0.1.8",
     "q": "^1.0.1",
     "request": "^2.37.0"
+  },
+  "devDependencies": {
+    "body-parser": "^1.4.3",
+    "express": "^4.6.1"
   }
 }
