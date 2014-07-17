@@ -17,6 +17,12 @@ app.get('/', function (req, res) {
   });
 });
 
+app.get('/login', function (req, res) {
+  res.json({
+    status: 'need login'
+  })
+});
+
 app.post('/login/registeredUserUsernameAndPasswordLogin', function (req, res) {
   if (req.body.h_password === 'fail') {
     res.sendfile('assets/loginFail.json');
@@ -30,6 +36,7 @@ app.get('/registered/opal-card-transactions/', function (req, res) {
 });
 
 app.get('/registered/getJsonCardDetailsArray', function (req, res) {
+  // res.redirect('/login');
   res.sendfile('assets/cardinfo.json');
 });
 
