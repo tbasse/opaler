@@ -95,20 +95,21 @@ Opal.prototype.opalGetRequest = function opalGetRequest (reqObj, cb) {
   url       = reqObj.url;
   param     = reqObj.param || {};
   param.jar = self.cookie;
+
   request.get(url, param, function (err, res) {
     if (err) {
-      // on error callback with error occured
       return cb(err);
-    }
-    if (authorizationNeeded(res.request.uri.pathname)) {
-      // check if response uri pathname starts with /login
-      // then we need to authorize first
+    } else if (authorizationNeeded(res.request.uri.pathname)) {
       self.opalAuthorize(function (err, res) {
-        // now that we should be logged in repeat request
-        self.opalGetRequest(reqObj, cb);
+        var json = JSON.parse(res);
+        console.log(json);
+        if (json.errorMessage) {
+          return cb(new Error(json.errorMessage));
+        } else {
+          self.opalGetRequest(reqObj, cb);
+        }
       });
     } else {
-      // return data body
       return cb(null, res.body);
     }
   });
@@ -125,6 +126,7 @@ Opal.prototype.getCardInfo = function(cb) {
   var reqObj = {
     url: self.baseurl + '/registered/getJsonCardDetailsArray?_=' + ts
   };
+
   self.opalGetRequest(reqObj, function (err, data) {
     if (err) {
       // console.log(err);
@@ -137,5 +139,4 @@ Opal.prototype.getCardInfo = function(cb) {
       cb(null, data);
     }
   });
-
 };
