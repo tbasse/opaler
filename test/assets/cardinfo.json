@@ -5,11 +5,11 @@
     "cardState": "ISSUED",
     "cardBalance": 0,
     "active": true,
-    "svPending": 5000,
+    "svPending": 6000,
     "toBeActivated": false,
     "displayName": "the-cards-name",
-    "cardBalanceInDollars": 6000,
-    "currentCardBalanceInDollars": 0,
-    "svPendingInDollars": 6000
+    "cardBalanceInDollars": "$60.00",
+    "currentCardBalanceInDollars": "$60.00",
+    "svPendingInDollars": "$60.00"
   }
 ]
