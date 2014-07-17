@@ -1,0 +1,15 @@
+[
+  {
+    "cardNumber": "3085220056295555",
+    "cardNickName": "the-cards-name",
+    "cardState": "ISSUED",
+    "cardBalance": 0,
+    "active": true,
+    "svPending": 5000,
+    "toBeActivated": false,
+    "displayName": "the-cards-name",
+    "cardBalanceInDollars": 6000,
+    "currentCardBalanceInDollars": 0,
+    "svPendingInDollars": 6000
+  }
+]

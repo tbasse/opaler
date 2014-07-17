@@ -29,5 +29,9 @@ app.get('/registered/opal-card-transactions/', function (req, res) {
   res.sendfile('assets/opal-card-activities-list.html');
 });
 
+app.get('/registered/getJsonCardDetailsArray', function (req, res) {
+  res.sendfile('assets/cardinfo.json');
+});
+
 console.log('resize server listening on 8181');
 app.listen(8181);
