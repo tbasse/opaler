@@ -53,7 +53,7 @@ var Opal = module.exports = function Opal (username, password) {
   self.username = username;
   self.password = password;
   self.cookie   = request.jar();
-  self.baseurl = 'https://www.opal.com.au/';
+  self.baseurl = 'https://www.opal.com.au';
 };
 
 /**
