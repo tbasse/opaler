@@ -1,6 +1,7 @@
 'use strict';
 
 var request = require('request');
+var cheerio = require('cheerio');
 
 /**
  * Convert currency strings into integers
@@ -10,7 +11,45 @@ var request = require('request');
  * @return {number}
  */
 function dollarToInt(dollar) {
-  return dollar.match(/\d+\.\d+/)[0] * 100;
+  var signed = dollar.match(/^(-|\+)/);
+  var number = dollar.match(/\d+\.\d+/);
+  if (! number) {
+    return '';
+  }
+  if (signed && signed[1] === '-') {
+    signed = '-';
+  } else {
+    signed = '+';
+  }
+  return parseFloat(signed + number[0]) * 100;
+}
+
+/**
+ * [parseTransactionDate description]
+ * 
+ * @param  {[type]} string [description]
+ * @return {[type]}        [description]
+ */
+function parseTransactionDate(string) {
+  var array = string.split('<br>');
+  var date = array[1].split('/');
+  date = date[2] + '-' + date[1] + '-' + date[0];
+  var time = array[2];
+  return Math.floor(new Date(date + ' ' + time).getTime() / 1000);
+}
+
+/**
+ * [parseTransactionMode description]
+ * 
+ * @param  {[type]} string [description]
+ * @return {[type]}        [description]
+ */
+function parseTransactionMode(string) {
+  var mode = string.match(/alt="(.*?)"/);
+  if (mode) {
+    return mode[1];
+  }
+  return '';
 }
 
 /**
@@ -35,6 +74,35 @@ function parseCardInfo(cardInfo) {
 }
 
 /**
+ * [parseCardTransactions description]
+ * 
+ * @param  {[type]} html [description]
+ * @return {[type]}      [description]
+ */
+function parseCardTransactions(html) {
+  var $    = cheerio.load(html);
+  var data = [];
+  $('#transaction-data tbody tr').each(function () {
+    var cells = [];
+    $(this).find('td').each(function () {
+      cells.push($(this).html());
+    });
+    data.push({
+      itemNumber: cells[0],
+      timestamp: parseTransactionDate(cells[1]),
+      mode: parseTransactionMode(cells[2]),
+      summary: cells[3],
+      unkown: cells[4],
+      unkown2: cells[5],
+      cost: dollarToInt(cells[6]),
+      moneysomething: dollarToInt(cells[7]),
+      balance: dollarToInt(cells[8])
+    });
+  });
+  return data;
+}
+
+/**
  * Check if pathname starts with /login to determinate if the url request
  * redirected to the login page and thus needs authorization
  * 
@@ -50,10 +118,11 @@ function authorizationNeeded(pathname) {
 
 var Opal = module.exports = function Opal (username, password) {
   var self = this;
-  self.username = username;
-  self.password = password;
+  self.username = 'username';
+  self.password = 'fail';
   self.cookie   = request.jar();
   self.baseurl = 'https://www.opal.com.au';
+  self.baseurl = 'http://127.0.0.1:8181';
 };
 
 /**
@@ -136,6 +205,29 @@ Opal.prototype.getCardInfo = function(cb) {
       if (! data) {
         return cb(new Error('Cardinfo - No valid JSON'));
       }
+      cb(null, data);
+    }
+  });
+};
+
+/**
+ * [getCardTransaction description]
+ * 
+ * @param  {Function} cb callback
+ */
+Opal.prototype.getCardTransactions = function(cb) {
+  var self = this;
+
+  var reqObj = {
+    url: self.baseurl + '/registered/opal-card-transactions/'
+  };
+
+  self.opalGetRequest(reqObj, function (err, data) {
+    if (err) {
+      // console.log(err);
+      cb(err);
+    } else {
+      data = parseCardTransactions(data);
       cb(null, data);
     }
   });
