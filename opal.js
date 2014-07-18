@@ -11,17 +11,13 @@ var cheerio = require('cheerio');
  * @return {number}
  */
 function dollarToInt(dollar) {
-  var signed = dollar.match(/^(-|\+)/);
-  var number = dollar.match(/\d+\.\d+/);
-  if (! number) {
+  var array = dollar.match(/^(-|\+)?[^\d]?(\d{1,2}\.\d{1,2})/);
+  if (! array) {
     return '';
   }
-  if (signed && signed[1] === '-') {
-    signed = '-';
-  } else {
-    signed = '+';
-  }
-  return parseFloat(signed + number[0]) * 100;
+  var sign = array[1] || '';
+  var value = array[2];
+  return parseFloat(sign + value) * 100;
 }
 
 /**
