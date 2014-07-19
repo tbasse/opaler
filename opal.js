@@ -82,11 +82,11 @@ function parseCardTransactions(html) {
   var $    = cheerio.load(html);
   var data = [];
   $('#transaction-data tbody tr').each(function () {
-    var cells = [];
+    var cells = [], journeyData;
     $(this).find('td').each(function () {
       cells.push($(this).html());
     });
-    data.push({
+    var dataJson = {
       transactionNumber: cells[0],
       timestamp: parseTransactionDate(cells[1]),
       date: new Date(parseTransactionDate(cells[1]) * 1000),
@@ -96,8 +96,18 @@ function parseCardTransactions(html) {
       fareApplied: cells[5] || null,
       fare: dollarToInt(cells[6]) || null,
       discount: dollarToInt(cells[7]) || null,
-      amount: dollarToInt(cells[8]) || null
-    });
+      amount: dollarToInt(cells[8]) || null,
+      journeyStart: null,
+      journeyEnd: null
+    };
+    if (/^(ferry|bus|train)$/.test(dataJson.mode)) {
+      journeyData = dataJson.summary.split(' to ');
+      if (journeyData.length === 2) {
+        dataJson.journeyStart = journeyData[0];
+        dataJson.journeyEnd = journeyData[1];
+      }
+    }
+    data.push(dataJson);
   });
   return data;
 }
