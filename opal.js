@@ -87,15 +87,16 @@ function parseCardTransactions(html) {
       cells.push($(this).html());
     });
     data.push({
-      itemNumber: cells[0],
+      transactionNumber: cells[0],
       timestamp: parseTransactionDate(cells[1]),
-      mode: parseTransactionMode(cells[2]),
-      summary: cells[3],
-      unkown: cells[4],
-      unkown2: cells[5],
-      cost: dollarToInt(cells[6]),
-      moneysomething: dollarToInt(cells[7]),
-      balance: dollarToInt(cells[8])
+      date: new Date(parseTransactionDate(cells[1]) * 1000),
+      mode: parseTransactionMode(cells[2]) || null,
+      summary: cells[3] || null,
+      journeyNumber: cells[4] || null,
+      fareApplied: cells[5] || null,
+      fare: dollarToInt(cells[6]) || null,
+      discount: dollarToInt(cells[7]) || null,
+      amount: dollarToInt(cells[8]) || null
     });
   });
   return data;
@@ -228,7 +229,7 @@ Opal.prototype.getCardTransactions = function(cb) {
   var self = this;
 
   var reqObj = {
-    url: self.baseurl + '/registered/opal-card-transactions/'
+    url: self.baseurl + '/registered/opal-card-transactions?cardIndex=0'
   };
 
   self.opalGetRequest(reqObj, function (err, data) {
