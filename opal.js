@@ -181,7 +181,6 @@ Opal.prototype.opalGetRequest = function opalGetRequest (reqObj, cb) {
     } else if (authorizationNeeded(res.request.uri.pathname)) {
       self.opalAuthorize(function (err, res) {
         var json = JSON.parse(res);
-        console.log(json);
         if (json.errorMessage) {
           return cb(new Error(json.errorMessage));
         } else {
