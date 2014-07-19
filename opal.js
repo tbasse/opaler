@@ -1,5 +1,6 @@
 'use strict';
 
+var Q       = require('q');
 var request = require('request');
 var cheerio = require('cheerio');
 
@@ -209,24 +210,40 @@ Opal.prototype.opalGetRequest = function opalGetRequest (reqObj, cb) {
  * @param  {Function} cb callback
  */
 Opal.prototype.getCardInfo = function(cb) {
-  var self = this;
-  var ts   = Math.floor(new Date().getTime() / 1000);
-  var reqObj = {
+  var self     = this;
+  var deferred = Q.defer();
+  var ts       = Math.floor(new Date().getTime() / 1000);
+  var reqObj   = {
     url: self.baseurl + '/registered/getJsonCardDetailsArray?_=' + ts
   };
 
   self.opalGetRequest(reqObj, function (err, data) {
     if (err) {
       // console.log(err);
-      cb(err);
+      if (cb) {
+        return cb(err);
+      } else {
+        return deferred.reject(err);
+      }
     } else {
       data = parseCardInfo(data);
       if (! data) {
-        return cb(new Error('Cardinfo - No valid JSON'));
+        if (cb) {
+          return cb(new Error('Cardinfo - No valid JSON'));
+        } else {
+          return deferred.reject(new Error('Cardinfo - No valid JSON'));
+        }
       }
-      cb(null, data);
+      if (cb) {
+        return cb(null, data);
+      } else {
+        return deferred.resolve(data);
+      }
     }
   });
+  if (! cb) {
+    return deferred.promise;
+  }
 };
 
 /**
@@ -235,7 +252,8 @@ Opal.prototype.getCardInfo = function(cb) {
  * @param  {Function} cb callback
  */
 Opal.prototype.getCardTransactions = function(cb) {
-  var self = this;
+  var self     = this;
+  var deferred = Q.defer();
 
   var reqObj = {
     url: self.baseurl + '/registered/opal-card-transactions?cardIndex=0'
@@ -244,10 +262,21 @@ Opal.prototype.getCardTransactions = function(cb) {
   self.opalGetRequest(reqObj, function (err, data) {
     if (err) {
       // console.log(err);
-      cb(err);
+      if (cb) {
+        return cb(err);
+      } else {
+        return deferred.reject(err);
+      }
     } else {
       data = parseCardTransactions(data);
-      cb(null, data);
+      if (cb) {
+        return cb(null, data);
+      } else {
+        return deferred.resolve(data);
+      }
     }
   });
+  if (! cb) {
+    return deferred.promise;
+  }
 };
