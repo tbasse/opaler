@@ -11,6 +11,9 @@ var cheerio = require('cheerio');
  * @return {number}
  */
 function dollarToInt(dollar) {
+  if (! dollar) {
+    return dollar;
+  }
   var array = dollar.match(/^(-|\+)?[^\d]?(\d{1,2}\.\d{1,2})/);
   if (! array) {
     return '';
