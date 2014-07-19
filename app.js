@@ -5,6 +5,7 @@ var OpalCard = require('./opal.js'),
 
 var opal = new OpalCard(config.opal.username, config.opal.password);
 
+// opal.turnOnDevMode();
 
 opal.getCardTransactions(function (err, data) {
   if (err) {

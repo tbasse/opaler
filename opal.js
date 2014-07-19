@@ -114,10 +114,20 @@ function authorizationNeeded(pathname) {
 
 var Opal = module.exports = function Opal (username, password) {
   var self = this;
-  self.username = 'username';
-  self.password = 'fail';
+  self.username = username;
+  self.password = password;
   self.cookie   = request.jar();
   self.baseurl = 'https://www.opal.com.au';
+};
+
+/**
+ * Turn on developer mode and use fake dev server
+ * 
+ */
+Opal.prototype.turnOnDevMode = function() {
+  var self = this;
+  self.username = 'username';
+  self.password = 'fail';
   self.baseurl = 'http://127.0.0.1:8181';
 };
 
