@@ -312,24 +312,50 @@ Opal.prototype.getUserDetails = function(cb) {
 /**
  * [getCardTransaction description]
  *
- * @param  {Number}   cardIndex  number of the card registered to the account
- * @param  {Function} cb         callback
+ * @param  {Object}   dataObj  {
+ *                               month: Number,
+ *                               year: Number,
+ *                               cardIndex: Number,
+ *                               pageIndex: Number
+ *                             }
+ * @param  {Function} cb       callback
  */
-Opal.prototype.getCardTransactions = function(cardIndex, cb) {
-  var self     = this;
-  var deferred = Q.defer();
+Opal.prototype.getCardTransactions = function(dataObj, cb) {
+  var self,
+      deferred,
+      month,
+      year,
+      cardIndex,
+      pageIndex,
+      ts,
+      reqObj;
+  
+  self     = this;
+  deferred = Q.defer();
 
-  cardIndex = cardIndex || 0;
-  if (typeof cardIndex === 'function') {
-    cb        = cardIndex;
-    cardIndex = 0;
+  dataObj = dataObj || {};
+  if (typeof dataObj === 'function') {
+    cb      = dataObj;
+    dataObj = {};
   }
 
-  var reqObj = {
+  month     = dataObj.month || -1;
+  year      = dataObj.year || -1;
+  cardIndex = dataObj.cardIndex || 0;
+  pageIndex = dataObj.pageIndex || 1;
+  ts        = Math.floor(new Date().getTime() / 1000);
+
+  reqObj = {
     url: [
       self.baseurl,
-      '/registered/opal-card-transactions?cardIndex=',
-      cardIndex
+      '/registered/opal-card-activities-list?',
+      [
+        'AMonth=' + month,
+        'AYear=' + year,
+        'cardIndex=' + cardIndex,
+        'pageIndex=' + pageIndex,
+        '_=' + ts,
+      ].join('&')
     ].join('')
   };
 
