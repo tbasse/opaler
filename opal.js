@@ -180,8 +180,8 @@ Opal.prototype.turnOnDevMode = function() {
  */
 Opal.prototype.opalAuthorize = function opalAuthorize (cb) {
   var self, params, url;
-  self      = this;
-  // Set form values
+
+  self   = this;
   params = {
     form: {
       h_username: self.username,
@@ -208,6 +208,7 @@ Opal.prototype.opalAuthorize = function opalAuthorize (cb) {
  */
 Opal.prototype.opalGetRequest = function opalGetRequest (reqObj, cb) {
   var self, url, param;
+  
   self      = this;
   url       = reqObj.url;
   param     = reqObj.param || {};
@@ -237,10 +238,15 @@ Opal.prototype.opalGetRequest = function opalGetRequest (reqObj, cb) {
  * @param  {Function} cb callback
  */
 Opal.prototype.getCardInfo = function(cb) {
-  var self     = this;
-  var deferred = Q.defer();
-  var ts       = Math.floor(new Date().getTime() / 1000);
-  var reqObj   = {
+  var self,
+      deferred,
+      ts,
+      reqObj;
+
+  self     = this;
+  deferred = Q.defer();
+  ts       = Math.floor(new Date().getTime() / 1000);
+  reqObj   = {
     url: self.baseurl + '/registered/getJsonCardDetailsArray?_=' + ts
   };
 
@@ -280,10 +286,15 @@ Opal.prototype.getCardInfo = function(cb) {
  * @return {[type]}      [description]
  */
 Opal.prototype.getUserDetails = function(cb) {
-  var self     = this;
-  var deferred = Q.defer();
-  var cardIndex = 0;
-  var reqObj   = {
+  var self,
+      deferred,
+      cardIndex,
+      reqObj;
+
+  self     = this;
+  deferred = Q.defer();
+  cardIndex = 0;
+  reqObj   = {
     url: self.baseurl + '/registered/my-details/?cardIndex=' + cardIndex
   };
 
