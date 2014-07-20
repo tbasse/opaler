@@ -1,8 +1,8 @@
 'use strict';
 
-var Q       = require('q');
-var request = require('request');
-var cheerio = require('cheerio');
+var Q       = require('q'),
+    request = require('request'),
+    cheerio = require('cheerio');
 
 /**
  * Convert currency strings into integers
