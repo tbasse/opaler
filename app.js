@@ -29,6 +29,11 @@ opal.getCardInfo()
 .then(function (data) {
   console.log(data);
   console.log('');
+  return opal.getUserDetails();
+})
+.then(function (data) {
+  console.log(data);
+  console.log('');
   return opal.getCardTransactions();
 })
 .then(function (data) {
