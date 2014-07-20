@@ -114,6 +114,33 @@ function parseCardTransactions(html) {
 }
 
 /**
+ * [parseUserDetails description]
+ * 
+ * @param  {[type]} html [description]
+ * @return {[type]}      [description]
+ */
+function parseUserDetails(html) {
+  var $    = cheerio.load(html);
+  var data = [];
+  $('#content #tab-5 .column tbody tr').each(function () {
+    var cells = [];
+    $(this).find('td').each(function () {
+      cells.push($(this).html());
+    });
+    data.push(cells[1]);
+  });
+  return {
+    firstName: data[0],
+    lastName: data[1],
+    address: data[2].split('<br>').slice(0, -1),
+    birthDate: data[3],
+    phoneNumber: data[4],
+    mobileNumber: data[5],
+    emailAddress: data[6]
+  };
+}
+
+/**
  * Check if pathname starts with /login to determinate if the url request
  * redirected to the login page and thus needs authorization
  * 
@@ -247,16 +274,63 @@ Opal.prototype.getCardInfo = function(cb) {
 };
 
 /**
- * [getCardTransaction description]
+ * [getUserDetails description]
  * 
- * @param  {Function} cb callback
+ * @param  {Function} cb [description]
+ * @return {[type]}      [description]
  */
-Opal.prototype.getCardTransactions = function(cb) {
+Opal.prototype.getUserDetails = function(cb) {
+  var self     = this;
+  var deferred = Q.defer();
+  var cardIndex = 0;
+  var reqObj   = {
+    url: self.baseurl + '/registered/my-details/?cardIndex=' + cardIndex
+  };
+
+  self.opalGetRequest(reqObj, function (err, data) {
+    if (err) {
+      // console.log(err);
+      if (cb) {
+        return cb(err);
+      } else {
+        return deferred.reject(err);
+      }
+    } else {
+      data = parseUserDetails(data);
+      if (cb) {
+        return cb(null, data);
+      } else {
+        return deferred.resolve(data);
+      }
+    }
+  });
+  if (! cb) {
+    return deferred.promise;
+  }
+};
+
+/**
+ * [getCardTransaction description]
+ *
+ * @param  {Number}   cardIndex  number of the card registered to the account
+ * @param  {Function} cb         callback
+ */
+Opal.prototype.getCardTransactions = function(cardIndex, cb) {
   var self     = this;
   var deferred = Q.defer();
 
+  cardIndex = cardIndex || 0;
+  if (typeof cardIndex === 'function') {
+    cb        = cardIndex;
+    cardIndex = 0;
+  }
+
   var reqObj = {
-    url: self.baseurl + '/registered/opal-card-transactions?cardIndex=0'
+    url: [
+      self.baseurl,
+      '/registered/opal-card-transactions?cardIndex=',
+      cardIndex
+    ].join('')
   };
 
   self.opalGetRequest(reqObj, function (err, data) {
