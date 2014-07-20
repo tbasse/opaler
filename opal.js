@@ -82,6 +82,12 @@ function parseCardInfo(cardInfo) {
 function parseCardTransactions(html) {
   var $    = cheerio.load(html);
   var data = [];
+
+  var noData = $('.no-activity-list').text();
+  if (noData !== '') {
+    return noData;
+  }
+
   $('#transaction-data tbody tr').each(function () {
     var cells = [], journeyData;
     $(this).find('td').each(function () {
@@ -361,7 +367,7 @@ Opal.prototype.getCardTransactions = function(dataObj, cb) {
       self.baseurl,
       '/registered/opal-card-activities-list?',
       [
-        'AMonth=' + month,
+        'AMonth=' + (month - 1), // 0 = January
         'AYear=' + year,
         'cardIndex=' + cardIndex,
         'pageIndex=' + pageIndex,
@@ -381,8 +387,14 @@ Opal.prototype.getCardTransactions = function(dataObj, cb) {
     } else {
       data = parseCardTransactions(data);
       if (cb) {
+        if (typeof data === 'string') {
+          return cb(new Error(data));
+        }
         return cb(null, data);
       } else {
+        if (typeof data === 'string') {
+          return deferred.reject(new Error(data));
+        }
         return deferred.resolve(data);
       }
     }
