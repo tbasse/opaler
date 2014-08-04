@@ -172,17 +172,6 @@ var Opal = module.exports = function Opal (username, password) {
 };
 
 /**
- * Turn on developer mode and use fake dev server
- * 
- */
-Opal.prototype.turnOnDevMode = function() {
-  var self = this;
-  self.username = 'username';
-  self.password = 'fail';
-  self.baseurl = 'http://127.0.0.1:8181';
-};
-
-/**
  * Authorize via login post against opal website
  * 
  * @param  {Function} cb callback
