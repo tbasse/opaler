@@ -97,21 +97,24 @@ function parseCardTransactions(html) {
       transactionNumber: cells[0],
       timestamp: parseTransactionDate(cells[1]),
       date: new Date(parseTransactionDate(cells[1]) * 1000),
-      mode: parseTransactionMode(cells[2]) || null,
       summary: cells[3] || null,
-      journeyNumber: cells[4] || null,
-      fareApplied: cells[5] || null,
-      fare: dollarToInt(cells[6]) || null,
-      discount: dollarToInt(cells[7]) || null,
-      amount: dollarToInt(cells[8]) || null,
-      journeyStart: null,
-      journeyEnd: null
+      mode: parseTransactionMode(cells[2]) || null,
+      fare: {
+        applied: cells[5] || null,
+        price: Math.abs(dollarToInt(cells[6])) || 0,
+        discount: Math.abs(dollarToInt(cells[7])) || 0,
+        paid: Math.abs(dollarToInt(cells[8])) || 0
+      },
+      journey: null
     };
     if (/^(ferry|bus|train)$/.test(dataJson.mode)) {
       journeyData = dataJson.summary.split(' to ');
       if (journeyData.length === 2) {
-        dataJson.journeyStart = journeyData[0];
-        dataJson.journeyEnd = journeyData[1];
+        dataJson.journey = {
+          number: cells[4] || null,
+          start: journeyData[0],
+          end: journeyData[1]
+        };
       }
     }
     data.push(dataJson);
