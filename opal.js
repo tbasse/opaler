@@ -327,7 +327,7 @@ Opal.prototype.getUserDetails = function(cb) {
  *                             }
  * @param  {Function} cb       callback
  */
-Opal.prototype.getCardTransactions = function(dataObj, cb) {
+Opal.prototype.getCardTransactions = function (options, cb) {
   var self,
       deferred,
       month,
@@ -340,16 +340,16 @@ Opal.prototype.getCardTransactions = function(dataObj, cb) {
   self     = this;
   deferred = Q.defer();
 
-  dataObj = dataObj || {};
-  if (typeof dataObj === 'function') {
-    cb      = dataObj;
-    dataObj = {};
+  options = options || {};
+  if (typeof options === 'function') {
+    cb      = options;
+    options = {};
   }
 
-  month     = dataObj.month || -1;
-  year      = dataObj.year || -1;
-  cardIndex = dataObj.cardIndex || 0;
-  pageIndex = dataObj.pageIndex || 1;
+  month     = options.month || -1;
+  year      = options.year || -1;
+  cardIndex = options.cardIndex || 0;
+  pageIndex = options.pageIndex || 1;
   ts        = Math.floor(new Date().getTime() / 1000);
 
   reqObj = {
