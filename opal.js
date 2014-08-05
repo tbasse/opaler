@@ -204,7 +204,7 @@ Opal.prototype.opalAuthorize = function opalAuthorize (cb) {
  * @param  {object}   reqObj {url: '', param: {}}
  * @param  {Function} cb     callback
  */
-Opal.prototype.opalGetRequest = function opalGetRequest (reqObj, cb) {
+Opal.prototype.getRequest = function getRequest (reqObj, cb) {
   var self, url, param;
   
   self      = this;
@@ -221,7 +221,7 @@ Opal.prototype.opalGetRequest = function opalGetRequest (reqObj, cb) {
         if (json.errorMessage) {
           return cb(new Error(json.errorMessage));
         } else {
-          self.opalGetRequest(reqObj, cb);
+          self.getRequest(reqObj, cb);
         }
       });
     } else {
@@ -248,7 +248,7 @@ Opal.prototype.getCardInfo = function(cb) {
     url: self.baseurl + '/registered/getJsonCardDetailsArray?_=' + ts
   };
 
-  self.opalGetRequest(reqObj, function (err, data) {
+  self.getRequest(reqObj, function (err, data) {
     if (err) {
       // console.log(err);
       if (cb) {
@@ -296,7 +296,7 @@ Opal.prototype.getUserDetails = function(cb) {
     url: self.baseurl + '/registered/my-details/?cardIndex=' + cardIndex
   };
 
-  self.opalGetRequest(reqObj, function (err, data) {
+  self.getRequest(reqObj, function (err, data) {
     if (err) {
       // console.log(err);
       if (cb) {
@@ -368,7 +368,7 @@ Opal.prototype.getCardTransactions = function(dataObj, cb) {
     ].join('')
   };
 
-  self.opalGetRequest(reqObj, function (err, data) {
+  self.getRequest(reqObj, function (err, data) {
     if (err) {
       // console.log(err);
       if (cb) {
