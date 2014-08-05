@@ -1,8 +1,8 @@
 'use strict';
 
-var Q       = require('q'),
-    request = require('request'),
-    cheerio = require('cheerio');
+var Q            = require('q'),
+    request      = require('request'),
+    cheerio      = require('cheerio');
 
 /**
  * Convert currency strings into integers
@@ -11,7 +11,7 @@ var Q       = require('q'),
  * @param  {string} dollar
  * @return {number}
  */
-function dollarToInt(dollar) {
+function dollarToInt (dollar) {
   if (! dollar) {
     return dollar;
   }
@@ -25,12 +25,12 @@ function dollarToInt(dollar) {
 }
 
 /**
- * [parseTransactionDate description]
+ * Parse transaction date to unix timestamp
  * 
- * @param  {[type]} string [description]
- * @return {[type]}        [description]
+ * @param  {String} string Date string
+ * @return {Number}        Unix timestamp
  */
-function parseTransactionDate(string) {
+function parseTransactionDate (string) {
   var array = string.split('<br>');
   var date = array[1].split('/');
   date = date[2] + '-' + date[1] + '-' + date[0];
@@ -39,12 +39,12 @@ function parseTransactionDate(string) {
 }
 
 /**
- * [parseTransactionMode description]
+ * Parse transaction mode (ferry, bus, train) from the info tables image tag
  * 
- * @param  {[type]} string [description]
- * @return {[type]}        [description]
+ * @param  {String} string HTML img tag
+ * @return {String}        Transaction mode
  */
-function parseTransactionMode(string) {
+function parseTransactionMode (string) {
   var mode = string.match(/alt="(.*?)"/);
   if (mode) {
     return mode[1];
@@ -55,10 +55,10 @@ function parseTransactionMode(string) {
 /**
  * Parse cardinfo array and convert currency strings to numbers
  * 
- * @param  {array} cardInfo
- * @return {array|bool}       Returns false when cardInfo isn't JSON
+ * @param  {array}      cardInfo
+ * @return {array|bool}           Returns false when cardInfo isn't JSON
  */
-function parseCardInfo(cardInfo) {
+function parseCardInfo (cardInfo) {
   try {
     cardInfo = JSON.parse(cardInfo);
   } catch(e) {
@@ -74,12 +74,12 @@ function parseCardInfo(cardInfo) {
 }
 
 /**
- * [parseCardTransactions description]
+ * Parse card transaction HTML table to return an data object
  * 
- * @param  {[type]} html [description]
- * @return {[type]}      [description]
+ * @param  {String} html HTML of transaction info table
+ * @return {Object}      Result object
  */
-function parseCardTransactions(html) {
+function parseCardTransactions (html) {
   var $    = cheerio.load(html);
   var data = [];
 
@@ -128,7 +128,7 @@ function parseCardTransactions(html) {
  * @param  {[type]} html [description]
  * @return {[type]}      [description]
  */
-function parseUserDetails(html) {
+function parseUserDetails (html) {
   var $    = cheerio.load(html);
   var data = [];
   $('#content #tab-5 .column tbody tr').each(function () {
@@ -156,7 +156,7 @@ function parseUserDetails(html) {
  * @param  {string} pathname
  * @return {bool}
  */
-function authorizationNeeded(pathname) {
+function authorizationNeeded (pathname) {
   if (/^\/login/.test(pathname)) {
     return true;
   }
@@ -235,7 +235,7 @@ Opal.prototype.getRequest = function getRequest (reqObj, cb) {
  * 
  * @param  {Function} cb callback
  */
-Opal.prototype.getCardInfo = function(cb) {
+Opal.prototype.getCardInfo = function (cb) {
   var self,
       deferred,
       ts,
@@ -282,7 +282,7 @@ Opal.prototype.getCardInfo = function(cb) {
  * @param  {Function} cb [description]
  * @return {[type]}      [description]
  */
-Opal.prototype.getUserDetails = function(cb) {
+Opal.prototype.getUserDetails = function (cb) {
   var self,
       deferred,
       cardIndex,
@@ -319,11 +319,11 @@ Opal.prototype.getUserDetails = function(cb) {
 /**
  * [getCardTransaction description]
  *
- * @param  {Object}   dataObj  {
- *                               month: Number,
- *                               year: Number,
- *                               cardIndex: Number,
- *                               pageIndex: Number
+ * @param  {Object}   options {
+ *                              month: Number,
+ *                              year: Number,
+ *                              cardIndex: Number,
+ *                              pageIndex: Number
  *                             }
  * @param  {Function} cb       callback
  */
