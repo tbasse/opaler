@@ -250,7 +250,6 @@ Opal.prototype.getCardInfo = function(cb) {
 
   self.getRequest(reqObj, function (err, data) {
     if (err) {
-      // console.log(err);
       if (cb) {
         return cb(err);
       } else {
@@ -298,7 +297,6 @@ Opal.prototype.getUserDetails = function(cb) {
 
   self.getRequest(reqObj, function (err, data) {
     if (err) {
-      // console.log(err);
       if (cb) {
         return cb(err);
       } else {
@@ -370,7 +368,6 @@ Opal.prototype.getCardTransactions = function(dataObj, cb) {
 
   self.getRequest(reqObj, function (err, data) {
     if (err) {
-      // console.log(err);
       if (cb) {
         return cb(err);
       } else {
