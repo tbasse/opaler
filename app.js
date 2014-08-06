@@ -1,11 +1,9 @@
 'use strict';
 
-var OpalCard = require('./opal.js'),
+var OpalCard = require('./lib/opal.js'),
     config   = require('./config.json');
 
 var opal = new OpalCard(config.opal.username, config.opal.password);
-
-// opal.turnOnDevMode();
 
 // opal.getCardTransactions(function (err, data) {
 //   if (err) {
