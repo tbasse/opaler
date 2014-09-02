@@ -6,23 +6,6 @@ var OpalCard = require('./lib/opal.js'),
 
 var opal = new OpalCard(config.opal.username, config.opal.password);
 
-// opal.getCardTransactions(function (err, data) {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log(data);
-//     console.log('');
-//     opal.getCardInfo(function (err, data) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         console.log(data);
-//         console.log('');
-//       }
-//     });
-//   }
-// });
-
 function getOverallFares(transactions) {
   var overallJourneys = 0,
       overallPrice    = 0,
@@ -44,36 +27,32 @@ function getOverallFares(transactions) {
   };
 }
 
-// opal.getCardInfo()
-// .then(function (data) {
-//   console.log(data);
-//   console.log('');
-//   return opal.getUserDetails();
-// })
-// .then(function (data) {
-//   console.log(data);
-//   console.log('');
-//   return opal.getCardTransactions({
-//     pageIndex: 1
-//   });
-// })
-// .then(function (data) {
-//   console.log(JSON.stringify(data, null, '  '));
-//   console.log('');
-//   console.log(JSON.stringify(getOverallFares(data), null, '  '));
-// })
-// .fail(function (err) {
-//   console.log(err);
-// });
+// Get Card Information
+opal.getCardInfo()
+.then(function (data) {
+  console.log(data);
+  console.log('');
+  return opal.getUserDetails();
+})
+.then(function (data) {
+  console.log(data);
+})
+.fail(function (err) {
+  console.log(err);
+})
+.done();
 
+
+// Get Transactions
 var fnArray = [
-  opal.getCardTransactions({pageIndex: 1}),
-  opal.getCardTransactions({pageIndex: 2}),
-  opal.getCardTransactions({pageIndex: 3}),
-  opal.getCardTransactions({pageIndex: 4})
+  opal.getCardTransactions({cardIndex: 0, pageIndex: 1}),
+  opal.getCardTransactions({cardIndex: 0, pageIndex: 2}),
+  opal.getCardTransactions({cardIndex: 0, pageIndex: 3}),
+  opal.getCardTransactions({cardIndex: 0, pageIndex: 4}),
+  opal.getCardTransactions({cardIndex: 0, pageIndex: 5}),
 ];
 
-return Q.all(fnArray)
+Q.all(fnArray)
 .then(function (data) {
   return data.reduce(function(a, b) {
     return a.concat(b);
