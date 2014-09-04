@@ -49,7 +49,7 @@ var fnArray = [
   opal.getCardTransactions({cardIndex: 0, pageIndex: 2}),
   opal.getCardTransactions({cardIndex: 0, pageIndex: 3}),
   opal.getCardTransactions({cardIndex: 0, pageIndex: 4}),
-  opal.getCardTransactions({cardIndex: 0, pageIndex: 5}),
+  opal.getCardTransactions({cardIndex: 0, pageIndex: 5})
 ];
 
 Promise.all(fnArray)
