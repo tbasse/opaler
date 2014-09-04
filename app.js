@@ -59,9 +59,9 @@ Promise.all(fnArray)
   });
 })
 .then(function (data) {
-  console.log(data);
+  console.log(JSON.stringify(data, null, 2));
   var overall = getOverallFares(data);
-  console.log(JSON.stringify(overall, null, '  '));
+  console.log(JSON.stringify(overall, null, 2));
 })
 .catch(function (err) {
   console.error(err);
