@@ -2,7 +2,7 @@
 
 var OpalCard = require('./lib/opal.js'),
     config   = require('./config.json'),
-    Q        = require('q');
+    Promise  = require('bluebird');
 
 var opal = new OpalCard(config.opal.username, config.opal.password);
 
@@ -37,7 +37,7 @@ opal.getCardInfo()
 .then(function (data) {
   console.log(data);
 })
-.fail(function (err) {
+.catch(function (err) {
   console.log(err);
 })
 .done();
@@ -52,7 +52,7 @@ var fnArray = [
   opal.getCardTransactions({cardIndex: 0, pageIndex: 5}),
 ];
 
-Q.all(fnArray)
+Promise.all(fnArray)
 .then(function (data) {
   return data.reduce(function(a, b) {
     return a.concat(b);
@@ -63,7 +63,7 @@ Q.all(fnArray)
   var overall = getOverallFares(data);
   console.log(JSON.stringify(overall, null, '  '));
 })
-.fail(function (err) {
+.catch(function (err) {
   console.error(err);
 })
 .done();
