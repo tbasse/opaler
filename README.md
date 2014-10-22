@@ -1,4 +1,4 @@
-This is a node module for accessing data about an Opal card.
+Get information for your opal card account.  
 https://www.opal.com.au/
 
 ## getCards([Callback])
