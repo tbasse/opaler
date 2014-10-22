@@ -1,11 +1,11 @@
 This is a node module for accessing data about an Opal card.
 
-## getCardInfo([Callback])
+## getCards([Callback])
 
 Usage
 
 ```
-var opal = new OpalCard('username', 'password123');
+var opal = new Opal('username', 'password123');
 
 // Promise
 opal.getCardInfo().then(function (result) {
@@ -37,12 +37,12 @@ Result `Array`
 }]
 ```
 
-## getUserDetails([Callback])
+## getAccount([Callback])
 
 Usage
 
 ```
-var opal = new OpalCard('username', 'password123');
+var opal = new Opal('username', 'password123');
 
 // Promise
 opal.getUserDetails().then(function (result) {
@@ -69,7 +69,7 @@ Result `Object`
 }
 ```
 
-## getCardTransactions(Options, [Callback])
+## getTransactions(Options, [Callback])
 
 Options
 
@@ -85,7 +85,7 @@ Options
 Usage
 
 ```
-var opal = new OpalCard('username', 'password123');
+var opal = new Opal('username', 'password123');
 
 // Promise
 opal.getCardTransactions({

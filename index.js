@@ -81,7 +81,7 @@ function parseCardInfo (cardInfo) {
  * @param  {String} html HTML of transaction info table
  * @return {Object}      Result object
  */
-function parseCardTransactions (html) {
+function parseTransactions (html) {
   var $    = cheerio.load(html);
   var data = [];
 
@@ -125,12 +125,12 @@ function parseCardTransactions (html) {
 }
 
 /**
- * ParseUserDetails description
+ * ParseAccountDetails description
  *
  * @param  {string} html
  * @return {object}
  */
-function parseUserDetails (html) {
+function parseAccountDetails (html) {
   var $    = cheerio.load(html);
   var data = [];
   $('#content #tab-5 .column tbody tr').each(function () {
@@ -234,7 +234,7 @@ Opal.prototype.getRequest = function getRequest (reqObj, cb) {
  *
  * @param  {function} cb callback
  */
-Opal.prototype.getCardInfo = function (cb) {
+Opal.prototype.getCards = function (cb) {
   return new Promise(function (resolve, reject) {
     var ts, reqObj;
     ts = Math.floor(new Date().getTime() / 1000);
@@ -262,7 +262,7 @@ Opal.prototype.getCardInfo = function (cb) {
  *
  * @param  {function} cb callback
  */
-Opal.prototype.getUserDetails = function (cb) {
+Opal.prototype.getAccount = function (cb) {
   return new Promise(function (resolve, reject) {
     var cardIndex, reqObj;
 
@@ -275,7 +275,7 @@ Opal.prototype.getUserDetails = function (cb) {
       if (err) {
         return reject(err);
       } else {
-        data = parseUserDetails(data);
+        data = parseAccountDetails(data);
         return resolve(data);
       }
     });
@@ -293,7 +293,7 @@ Opal.prototype.getUserDetails = function (cb) {
  *                             }
  * @param  {function} cb       callback
  */
-Opal.prototype.getCardTransactions = function (options, cb) {
+Opal.prototype.getTransactions = function (options, cb) {
   return new Promise(function (resolve, reject) {
     var month, year, cardIndex, pageIndex, ts, reqObj;
 
@@ -323,7 +323,7 @@ Opal.prototype.getCardTransactions = function (options, cb) {
       if (err) {
         return reject(err);
       } else {
-        data = parseCardTransactions(data);
+        data = parseTransactions(data);
         if (typeof data === 'string') {
           return reject(new Error(data));
         }

@@ -1,12 +1,12 @@
 'use strict';
 
-var OpalCard = require('../index.js'),
+var Opal = require('../index.js'),
     Promise  = require('../node_modules/bluebird');
 
 var opalUsername = '';
 var opalPassword = '';
 
-var opal = new OpalCard(opalUsername, opalPassword);
+var opal = new Opal(opalUsername, opalPassword);
 
 function getOverallFares(transactions) {
   var overallJourneys = 0,
@@ -30,11 +30,11 @@ function getOverallFares(transactions) {
 }
 
 // Get Card Information
-opal.getCardInfo()
+opal.getCards()
 .then(function (data) {
   console.log(data);
   console.log('');
-  return opal.getUserDetails();
+  return opal.getAccount();
 })
 .then(function (data) {
   console.log(data);
@@ -46,7 +46,7 @@ opal.getCardInfo()
 
 // Get Transactions
 var fnArray = [
-  opal.getCardTransactions({cardIndex: 0, pageIndex: 1})
+  opal.getTransactions({cardIndex: 0, pageIndex: 1})
 ];
 
 Promise.all(fnArray)
