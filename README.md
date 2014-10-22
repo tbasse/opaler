@@ -5,7 +5,7 @@ https://www.opal.com.au/
 
 Usage
 
-```
+```javascript
 var opal = new Opal('username', 'password123');
 
 // Promise
@@ -21,7 +21,7 @@ opal.getCardInfo(function (err, result) {
 
 Result `Array`
 
-```
+```javascript
 [{
   cardNumber: String
   displayCardNumber: {Unknown}
@@ -42,7 +42,7 @@ Result `Array`
 
 Usage
 
-```
+```javascript
 var opal = new Opal('username', 'password123');
 
 // Promise
@@ -58,7 +58,7 @@ opal.getUserDetails(function (err, result) {
 
 Result `Object`
 
-```
+```javascript
 {
   firstName: String,
   lastName: String,
@@ -74,7 +74,7 @@ Result `Object`
 
 Options
 
-```
+```javascript
 {
   month,
   year,
@@ -85,7 +85,7 @@ Options
 
 Usage
 
-```
+```javascript
 var opal = new Opal('username', 'password123');
 
 // Promise
@@ -107,7 +107,7 @@ opal.getCardTransactions({
 
 Result `Array`
 
-```
+```javascript
 [{
   transactionNumber: String,
   timestamp: Number,
