@@ -21,7 +21,7 @@ function dollarToInt (dollar) {
   }
   var sign = array[1] || '';
   var value = array[2];
-  return parseFloat(sign + value) * 100;
+  return Math.round(parseFloat(sign + value) * 100);
 }
 
 /**
