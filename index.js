@@ -68,6 +68,9 @@ function parseCardInfo (cardInfo) {
     e.cardBalance        = dollarToInt(e.cardBalanceInDollars);
     e.currentCardBalance = dollarToInt(e.currentCardBalanceInDollars);
     e.svPending          = dollarToInt(e.svPendingInDollars);
+    delete e.cardBalanceInDollars;
+    delete e.currentCardBalanceInDollars;
+    delete e.svPendingInDollars;
   });
   return cardInfo;
 }
