@@ -38,6 +38,19 @@ function parseTransactionDate (string) {
 }
 
 /**
+ * Parse orders date to unix timestamp
+ *
+ * @param  {String} string Date string
+ * @return {Number}        Unix timestamp
+ */
+function parseOrdersDate (string) {
+  var regex       = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/,
+      replacement = '$3-$2-$1',
+      date        = new Date(string.replace(regex, replacement));
+  return Math.floor(date.getTime() / 1000);
+}
+
+/**
  * Parse transaction mode (ferry, bus, train) from the info tables image tag
  *
  * @param  {String} string HTML img tag
@@ -149,6 +162,31 @@ function parseAccountDetails (html) {
     mobileNumber: data[5],
     emailAddress: data[6]
   };
+}
+
+/**
+ * ParseOrdersDetails description
+ *
+ * @param  {string} html
+ * @return {object}
+ */
+function parseOrdersDetails (html) {
+  var $    = cheerio.load(html);
+  var data = [];
+  $('#content #tab-5 #transaction-data tbody tr').each(function () {
+    var cells = [];
+    $(this).find('td').each(function () {
+      cells.push($(this).html());
+    });
+    data.push({
+      orderId: cells[0],
+      orderDate: new Date(parseOrdersDate(cells[1]) * 1000),
+      orderDateTimestamp: parseOrdersDate(cells[1]),
+      cardType: cells[2],
+      orderStatus: cells[3]
+    });
+  });
+  return data;
 }
 
 /**
@@ -276,6 +314,31 @@ Opal.prototype.getAccount = function (cb) {
         return reject(err);
       } else {
         data = parseAccountDetails(data);
+        return resolve(data);
+      }
+    });
+  }.bind(this)).nodeify(cb);
+};
+
+/**
+ * Fetch orders details from website
+ *
+ * @param  {function} cb callback
+ */
+Opal.prototype.getOrders = function (cb) {
+  return new Promise(function (resolve, reject) {
+    var cardIndex, reqObj;
+
+    cardIndex = 0;
+    reqObj    = {
+      url: this.baseurl + '/registered/index/?cardIndex=' + cardIndex
+    };
+
+    this.getRequest(reqObj, function (err, data) {
+      if (err) {
+        return reject(err);
+      } else {
+        data = parseOrdersDetails(data);
         return resolve(data);
       }
     });
