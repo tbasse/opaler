@@ -113,7 +113,7 @@ function parseCardTransactions (html) {
       journeyData = dataJson.summary.split(' to ');
       if (journeyData.length === 2) {
         dataJson.journey = {
-          number: cells[4] || null,
+          number: parseInt(cells[4], 10) || null,
           start: journeyData[0],
           end: journeyData[1]
         };
