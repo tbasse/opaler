@@ -1,9 +1,0 @@
-{
-  "pageNumber": null,
-  "validationFailure": true,
-  "errorMessage": "Invalid Login - Not the real error message",
-  "failedLoginAttempt": true,
-  "failedLoginAttemptsCount": 1,
-  "accountBlocked": false,
-  "customerType": null
-}

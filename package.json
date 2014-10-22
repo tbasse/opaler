@@ -1,16 +1,13 @@
 {
   "name": "opal",
-  "version": "0.0.0",
-  "description": "",
-  "author": "",
-  "license": "ISC",
+  "version": "0.1.0",
+  "description": "Retrieve information about your opal card.",
+  "author": "tgdb77@gmail.com",
+  "license": "MIT",
+  "main": "./index.js",
   "dependencies": {
     "bluebird": "^2.3.2",
     "cheerio": "^0.17.0",
     "request": "^2.37.0"
-  },
-  "devDependencies": {
-    "body-parser": "^1.4.3",
-    "express": "^4.6.1"
   }
 }
