@@ -365,7 +365,7 @@ Opal.prototype.getTransactions = function (options, cb) {
     month     = options.month || -1;
     year      = options.year || -1;
     cardIndex = options.cardIndex || 0;
-    pageIndex = options.pageIndex || null;
+    pageIndex = options.pageIndex || 1;
     ts        = Math.floor(new Date().getTime() / 1000);
 
     reqObj = {
@@ -393,5 +393,34 @@ Opal.prototype.getTransactions = function (options, cb) {
         return resolve(data);
       }
     });
+  }.bind(this)).nodeify(cb);
+};
+
+/**
+ * Loop through all transaction pages until the end to get all transactions
+ * 
+ * @param  {[type]}   cardIndex [description]
+ * @param  {Function} cb        [description]
+ * @return {[type]}             [description]
+ */
+Opal.prototype.getAllTransactions = function (cardIndex, cb) {
+  var transactions = [];
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    var options = {
+      cardIndex: cardIndex || 0,
+      pageIndex: 1
+    };
+    function loop() {
+      self.getTransactions(options, function (err, result) {
+        if (err) {
+          return resolve(transactions);
+        }
+        transactions = transactions.concat(result);
+        options.pageIndex += 1;
+        loop();
+      });
+    }
+    loop();
   }.bind(this)).nodeify(cb);
 };
