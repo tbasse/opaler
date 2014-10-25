@@ -34,8 +34,10 @@ Result `Array`
   svPending: Number,
   toBeActivated: Boolean,
   displayName: String,
+  cardIndex: Number,
   currentCardBalance: Number
-}]
+},
+...]
 ```
 
 ## getAccount([Callback])

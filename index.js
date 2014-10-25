@@ -78,6 +78,7 @@ function parseCardInfo (cardInfo) {
   }
   cardInfo.forEach(function (element, index, array) {
     var e = element;
+    e.cardIndex          = index;
     e.cardBalance        = dollarToInt(e.cardBalanceInDollars);
     e.currentCardBalance = dollarToInt(e.currentCardBalanceInDollars);
     e.svPending          = dollarToInt(e.svPendingInDollars);
