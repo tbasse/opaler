@@ -81,9 +81,11 @@ Options
   month,
   year,
   cardIndex,
-  pageIndex
+  [pageIndex]
 }
 ```
+
+The pageIndex is optional. If no pageIndex is set all pages will be fetched.
 
 Usage
 
