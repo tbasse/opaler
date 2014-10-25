@@ -191,6 +191,65 @@ function parseOrdersDetails (html) {
 }
 
 /**
+ * Fetch transaction data from opal.com.au for a specific pagination index
+ * 
+ * @param  {Opal}     opal
+ * @param  {Object}   options
+ * @param  {Function} cb
+ */
+function getTransactionPageSingle(opal, options, cb) {
+  var reqObj = {
+    url: [
+      opal.baseurl,
+      '/registered/opal-card-activities-list?',
+      [
+        'AMonth=' + (options.month - 1), // 0 = January
+        'AYear=' + options.year,
+        'cardIndex=' + options.cardIndex,
+        'pageIndex=' + options.pageIndex,
+        '_=' + options.ts,
+      ].join('&')
+    ].join('')
+  };
+
+  opal.getRequest(reqObj, function (err, data) {
+    if (err) {
+      return cb(err);
+    } else {
+      data = parseTransactions(data);
+      if (typeof data === 'string') {
+        return cb(new Error(data));
+      }
+      return cb(null, data);
+    }
+  });
+}
+
+/**
+ * Walk through all transaction pages on opal.com.au and call 
+ * `getTransactionPageSingle` to fetch the data for every pagination index
+ * 
+ * @param  {Opal}     opal
+ * @param  {Object}   options
+ * @param  {Function} cb
+ */
+function getTransactionPageAll(opal, options, cb) {
+  var transactions = [];
+  options.pageIndex = 1;
+  function loop() {
+    getTransactionPageSingle(opal, options, function (err, result) {
+      if (err) {
+        return cb(err, transactions);
+      }
+      transactions = transactions.concat(result);
+      options.pageIndex += 1;
+      loop();
+    });
+  }
+  loop();
+}
+
+/**
  * Check if pathname starts with /login to determinate if the url request
  * redirected to the login page and thus needs authorization
  *
@@ -358,70 +417,31 @@ Opal.prototype.getOrders = function (cb) {
  * @param  {function} cb       callback
  */
 Opal.prototype.getTransactions = function (options, cb) {
-  return new Promise(function (resolve, reject) {
-    var month, year, cardIndex, pageIndex, ts, reqObj;
+  options = options || {};
 
-    options = options || {};
+  options.month     = options.month || -1;
+  options.year      = options.year || -1;
+  options.cardIndex = options.cardIndex || 0;
+  options.pageIndex = options.pageIndex || null;
+  options.ts        = Math.floor(new Date().getTime() / 1000);
 
-    month     = options.month || -1;
-    year      = options.year || -1;
-    cardIndex = options.cardIndex || 0;
-    pageIndex = options.pageIndex || 1;
-    ts        = Math.floor(new Date().getTime() / 1000);
-
-    reqObj = {
-      url: [
-        this.baseurl,
-        '/registered/opal-card-activities-list?',
-        [
-          'AMonth=' + (month - 1), // 0 = January
-          'AYear=' + year,
-          'cardIndex=' + cardIndex,
-          'pageIndex=' + pageIndex,
-          '_=' + ts,
-        ].join('&')
-      ].join('')
-    };
-
-    this.getRequest(reqObj, function (err, data) {
-      if (err) {
-        return reject(err);
-      } else {
-        data = parseTransactions(data);
-        if (typeof data === 'string') {
-          return reject(new Error(data));
+  if (!options.pageIndex) {
+    return new Promise(function (resolve, reject) {
+      getTransactionPageAll(this, options, function (err, data) {
+        // Not rejecting on error because we expect the function
+        // to end with an error at some point when it arrives at a non-existing
+        // pageIndex
+        return resolve(data);
+      });
+    }.bind(this));
+  } else {
+    return new Promise(function (resolve, reject) {
+      getTransactionPageSingle(this, options, function (err, data) {
+        if (err) {
+          return reject(err);
         }
         return resolve(data);
-      }
-    });
-  }.bind(this)).nodeify(cb);
-};
-
-/**
- * Loop through all transaction pages until the end to get all transactions
- * 
- * @param  {[type]}   cardIndex [description]
- * @param  {Function} cb        [description]
- * @return {[type]}             [description]
- */
-Opal.prototype.getAllTransactions = function (cardIndex, cb) {
-  var transactions = [];
-  var self = this;
-  return new Promise(function (resolve, reject) {
-    var options = {
-      cardIndex: cardIndex || 0,
-      pageIndex: 1
-    };
-    function loop() {
-      self.getTransactions(options, function (err, result) {
-        if (err) {
-          return resolve(transactions);
-        }
-        transactions = transactions.concat(result);
-        options.pageIndex += 1;
-        loop();
       });
-    }
-    loop();
-  }.bind(this)).nodeify(cb);
+    }.bind(this));
+  }
 };
