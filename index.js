@@ -193,14 +193,14 @@ function parseOrdersDetails (html) {
 /**
  * Fetch transaction data from opal.com.au for a specific pagination index
  * 
- * @param  {Opal}     opal
+ * @param  {Opaler}   opaler
  * @param  {Object}   options
  * @param  {Function} cb
  */
-function getTransactionPageSingle(opal, options, cb) {
+function getTransactionPageSingle(opaler, options, cb) {
   var reqObj = {
     url: [
-      opal.baseurl,
+      opaler.baseurl,
       '/registered/opal-card-activities-list?',
       [
         'AMonth=' + (options.month - 1), // 0 = January
@@ -212,7 +212,7 @@ function getTransactionPageSingle(opal, options, cb) {
     ].join('')
   };
 
-  opal.getRequest(reqObj, function (err, data) {
+  opaler.getRequest(reqObj, function (err, data) {
     if (err) {
       return cb(err);
     } else {
@@ -229,15 +229,15 @@ function getTransactionPageSingle(opal, options, cb) {
  * Walk through all transaction pages on opal.com.au and call 
  * `getTransactionPageSingle` to fetch the data for every pagination index
  * 
- * @param  {Opal}     opal
+ * @param  {Opaler}   opaler
  * @param  {Object}   options
  * @param  {Function} cb
  */
-function getTransactionPageAll(opal, options, cb) {
+function getTransactionPageAll(opaler, options, cb) {
   var transactions = [];
   options.pageIndex = 1;
   function loop() {
-    getTransactionPageSingle(opal, options, function (err, result) {
+    getTransactionPageSingle(opaler, options, function (err, result) {
       if (err) {
         return cb(err, transactions);
       }
@@ -263,7 +263,7 @@ function authorizationNeeded (pathname) {
   return false;
 }
 
-var Opal = module.exports = function Opal (username, password) {
+var Opaler = module.exports = function Opaler (username, password) {
   this.username = username;
   this.password = password;
   this.cookie   = request.jar();
@@ -275,7 +275,7 @@ var Opal = module.exports = function Opal (username, password) {
  *
  * @param  {function} cb callback
  */
-Opal.prototype.opalAuthorize = function opalAuthorize (cb) {
+Opaler.prototype.authorize = function authorize (cb) {
   var params, url;
 
   params = {
@@ -302,7 +302,7 @@ Opal.prototype.opalAuthorize = function opalAuthorize (cb) {
  * @param  {object}   reqObj {url: '', param: {}}
  * @param  {function} cb     callback
  */
-Opal.prototype.getRequest = function getRequest (reqObj, cb) {
+Opaler.prototype.getRequest = function getRequest (reqObj, cb) {
   var url, param;
 
   url       = reqObj.url;
@@ -313,7 +313,7 @@ Opal.prototype.getRequest = function getRequest (reqObj, cb) {
     if (err) {
       return cb(err);
     } else if (authorizationNeeded(res.request.uri.pathname)) {
-      this.opalAuthorize(function (err, res) {
+      this.authorize(function (err, res) {
         var json = JSON.parse(res);
         if (json.errorMessage) {
           return cb(new Error(json.errorMessage));
@@ -332,7 +332,7 @@ Opal.prototype.getRequest = function getRequest (reqObj, cb) {
  *
  * @param  {function} cb callback
  */
-Opal.prototype.getCards = function (cb) {
+Opaler.prototype.getCards = function (cb) {
   return new Promise(function (resolve, reject) {
     var ts, reqObj;
     ts = Math.floor(new Date().getTime() / 1000);
@@ -360,7 +360,7 @@ Opal.prototype.getCards = function (cb) {
  *
  * @param  {function} cb callback
  */
-Opal.prototype.getAccount = function (cb) {
+Opaler.prototype.getAccount = function (cb) {
   return new Promise(function (resolve, reject) {
     var cardIndex, reqObj;
 
@@ -385,7 +385,7 @@ Opal.prototype.getAccount = function (cb) {
  *
  * @param  {function} cb callback
  */
-Opal.prototype.getOrders = function (cb) {
+Opaler.prototype.getOrders = function (cb) {
   return new Promise(function (resolve, reject) {
     var cardIndex, reqObj;
 
@@ -416,7 +416,7 @@ Opal.prototype.getOrders = function (cb) {
  *                             }
  * @param  {function} cb       callback
  */
-Opal.prototype.getTransactions = function (options, cb) {
+Opaler.prototype.getTransactions = function (options, cb) {
   options = options || {};
 
   options.month     = options.month || -1;

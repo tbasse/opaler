@@ -1,20 +1,26 @@
 Get information for your opal card account.  
 https://www.opal.com.au/
 
+## Install
+
+```
+npm install opaler
+```
+
 ## getCards([Callback])
 
 Usage
 
 ```javascript
-var opal = new Opal('username', 'password123');
+var opaler = new Opaler('username', 'password123');
 
 // Promise
-opal.getCardInfo().then(function (result) {
+opaler.getCardInfo().then(function (result) {
   console.log(result);
 });
 
 // Callback
-opal.getCardInfo(function (err, result) {
+opaler.getCardInfo(function (err, result) {
   console.log(result);
 });
 ```
@@ -45,15 +51,15 @@ Result `Array`
 Usage
 
 ```javascript
-var opal = new Opal('username', 'password123');
+var opaler = new Opaler('username', 'password123');
 
 // Promise
-opal.getUserDetails().then(function (result) {
+opaler.getUserDetails().then(function (result) {
   console.log(result);
 });
 
 // Callback
-opal.getUserDetails(function (err, result) {
+opaler.getUserDetails(function (err, result) {
   console.log(result);
 });
 ```
@@ -90,10 +96,10 @@ The pageIndex is optional. If no pageIndex is set all pages will be fetched.
 Usage
 
 ```javascript
-var opal = new Opal('username', 'password123');
+var opaler = new Opaler('username', 'password123');
 
 // Promise
-opal.getCardTransactions({
+opaler.getCardTransactions({
   cardIndex: 0,
   pageIndex: 1
 }).then(function (result) {
@@ -101,7 +107,7 @@ opal.getCardTransactions({
 });
 
 // Callback
-opal.getCardTransactions({
+opaler.getCardTransactions({
   cardIndex: 0,
   pageIndex: 1
 }, function (err, result) {
