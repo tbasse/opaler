@@ -5,6 +5,36 @@ var request = require('request');
 var cheerio = require('cheerio');
 
 /**
+ * Convert scraped HTML to text and break up into an array if it contains <br>
+ * 
+ * @param  {String}       string
+ * @return {Array|String}        
+ */
+function parseScrapedText(string) {
+  var result = string.split('<br>');
+  result.forEach(function (value, index) {
+    var $ = cheerio.load('<p>' + value + '</p>');
+    result[index] = $('p').text();
+  });
+  return result.length === 1 ? result.join('') : result.filter(Boolean);
+}
+
+/**
+ * Camelcaseify a given string and remove all non alphabetical characters
+ * 
+ * @param  {String} string
+ * @return {String}        Camelcasified string
+ */
+function camelCaseify(string) {
+  return string
+         .toLowerCase()
+         .replace(/[^a-z ]/g, '')
+         .replace(/( [a-z])/g, function (a) {
+           return a.toUpperCase().substr(1);
+         });
+}
+
+/**
  * Convert currency strings into integers
  * $80.00 will become 8000
  *
@@ -146,23 +176,15 @@ function parseTransactions (html) {
  */
 function parseAccountDetails (html) {
   var $    = cheerio.load(html);
-  var data = [];
+  var data = [], result = {};
   $('#content #tab-5 .column tbody tr').each(function () {
     var cells = [];
     $(this).find('td').each(function () {
       cells.push($(this).html());
     });
-    data.push(cells[1]);
+    result[camelCaseify(cells[0])] = parseScrapedText(cells[1]);
   });
-  return {
-    firstName: data[0],
-    lastName: data[1],
-    address: data[2].split('<br>').slice(0, -1),
-    birthDate: data[3],
-    phoneNumber: data[4],
-    mobileNumber: data[5],
-    emailAddress: data[6]
-  };
+  return result;
 }
 
 /**

@@ -71,12 +71,19 @@ Result `Object`
   firstName: String,
   lastName: String,
   address: Array,
-  birthDate: String,
+  dateOfBirth: String,
   phoneNumber: String,
   mobileNumber: String,
-  emailAddress: String
+  emailAddress: String,
+  nameOnCard: String,
+  cardType: String,
+  cardNumber: String,
+  cardExpires: String,
+  ...
 }
 ```
+
+The properties of the result may vary because the method camelcasifies the rows names of the table shown of the webpage and uses them as the objects key names.
 
 ## getTransactions(Options, [Callback])
 
