@@ -10,7 +10,7 @@ var cheerio = require('cheerio');
  * @param  {String}       string
  * @return {Array|String}        
  */
-function parseScrapedText(string) {
+function parseScrapedText (string) {
   var result = string.split('<br>');
   result.forEach(function (value, index) {
     var $ = cheerio.load('<p>' + value + '</p>');
@@ -25,7 +25,7 @@ function parseScrapedText(string) {
  * @param  {String} string
  * @return {String}        Camelcasified string
  */
-function camelCaseify(string) {
+function camelCaseify (string) {
   return string
          .toLowerCase()
          .replace(/[^a-z ]/g, '')
@@ -219,7 +219,7 @@ function parseOrdersDetails (html) {
  * @param  {Object}   options
  * @param  {Function} cb
  */
-function getTransactionPageSingle(opaler, options, cb) {
+function getTransactionPageSingle (opaler, options, cb) {
   var reqObj = {
     url: [
       opaler.baseurl,
@@ -255,7 +255,7 @@ function getTransactionPageSingle(opaler, options, cb) {
  * @param  {Object}   options
  * @param  {Function} cb
  */
-function getTransactionPageAll(opaler, options, cb) {
+function getTransactionPageAll (opaler, options, cb) {
   var transactions = [];
   options.pageIndex = 1;
   function loop() {
