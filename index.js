@@ -176,7 +176,7 @@ function parseTransactions (html) {
  */
 function parseAccountDetails (html) {
   var $    = cheerio.load(html);
-  var data = [], result = {};
+  var result = {};
   $('#content #tab-5 .column tbody tr').each(function () {
     var cells = [];
     $(this).find('td').each(function () {
