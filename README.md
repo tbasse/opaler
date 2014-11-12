@@ -128,7 +128,6 @@ Result `Array`
 [{
   transactionNumber: String,
   timestamp: Number,
-  date: Date,
   summary: String,
   mode: String (ferry|bus|train),
   fare: { 
