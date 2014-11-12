@@ -142,7 +142,6 @@ function parseTransactions (html) {
     var dataJson = {
       transactionNumber: cells[0],
       timestamp: parseTransactionDate(cells[1]),
-      date: new Date(parseTransactionDate(cells[1]) * 1000),
       summary: cells[3] || null,
       mode: parseTransactionMode(cells[2]) || null,
       fare: {
