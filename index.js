@@ -463,6 +463,6 @@ Opaler.prototype.getTransactions = function (options, cb) {
         }
         return resolve(data);
       });
-    }.bind(this));
+    }.bind(this)).nodeify(cb);
   }
 };
