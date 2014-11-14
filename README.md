@@ -83,7 +83,7 @@ Result `Object`
 }
 ```
 
-The properties of the result may vary because the method camelcasifies the rows names of the table shown of the webpage and uses them as the objects key names.
+The properties of the result may vary because the method camelcasifies the rows names of the table shown on the opal.com.au webpage and uses them as the objects key names.
 
 ## getTransactions(Options, [Callback])
 
@@ -91,14 +91,15 @@ Options
 
 ```javascript
 {
-  month,
-  year,
-  cardIndex,
-  [pageIndex]
+  cardIndex: Number,
+  [month: Number],
+  [year: Number,
+  [pageIndex: Number]
 }
 ```
 
-The pageIndex is optional. If no pageIndex is set all pages will be fetched.
+`pageIndex`, `month` and `year` are optional.  
+If no `pageIndex` is set all pages will be fetched.
 
 Usage
 
