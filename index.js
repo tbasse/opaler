@@ -335,7 +335,11 @@ Opaler.prototype.getRequest = function getRequest (reqObj, cb) {
       return cb(err);
     } else if (authorizationNeeded(res.request.uri.pathname)) {
       this.authorize(function (err, res) {
-        var json = JSON.parse(res);
+        try {
+          var json = JSON.parse(res);
+        } catch (err) {
+          return cb(err);
+        }
         if (json.errorMessage) {
           return cb(new Error(json.errorMessage));
         } else {
