@@ -6,9 +6,9 @@ var cheerio = require('cheerio');
 
 /**
  * Convert scraped HTML to text and break up into an array if it contains <br>
- * 
+ *
  * @param  {String}       string
- * @return {Array|String}        
+ * @return {Array|String}
  */
 function parseScrapedText (string) {
   var result = string.split('<br>');
@@ -21,15 +21,17 @@ function parseScrapedText (string) {
 
 /**
  * Camelcaseify a given string and remove all non alphabetical characters
- * 
+ *
  * @param  {String} string
- * @return {String}        Camelcasified string
+ * @param  {String} delimiter
+ * @return {String}
  */
-function camelCaseify (string) {
+function camelCaseify (string, delimiter) {
+  delimiter = delimiter || '_';
   return string
          .toLowerCase()
-         .replace(/[^a-z ]/g, '')
-         .replace(/( [a-z])/g, function (a) {
+         .replace(new RegExp('[^a-z' + delimiter + ']', 'g'), '')
+         .replace(new RegExp('(' + delimiter + '[a-z])', 'g'), function (a) {
            return a.toUpperCase().substr(1);
          });
 }
@@ -97,8 +99,8 @@ function parseTransactionMode (string) {
 /**
  * Parse cardinfo array and convert currency strings to numbers
  *
- * @param  {array}      cardInfo
- * @return {array|bool}           Returns false when cardInfo isn't JSON
+ * @param  {Array}      cardInfo
+ * @return {Array|Boolean}           Returns false when cardInfo isn't JSON
  */
 function parseCardInfo (cardInfo) {
   try {
@@ -170,8 +172,8 @@ function parseTransactions (html) {
 /**
  * ParseAccountDetails description
  *
- * @param  {string} html
- * @return {object}
+ * @param  {String} html
+ * @return {Object}
  */
 function parseAccountDetails (html) {
   var $    = cheerio.load(html);
@@ -181,7 +183,7 @@ function parseAccountDetails (html) {
     $(this).find('td').each(function () {
       cells.push($(this).html());
     });
-    result[camelCaseify(cells[0])] = parseScrapedText(cells[1]);
+    result[camelCaseify(cells[0], ' ')] = parseScrapedText(cells[1]);
   });
   return result;
 }
@@ -189,8 +191,8 @@ function parseAccountDetails (html) {
 /**
  * ParseOrdersDetails description
  *
- * @param  {string} html
- * @return {object}
+ * @param  {String} html
+ * @return {Object}
  */
 function parseOrdersDetails (html) {
   var $    = cheerio.load(html);
@@ -213,9 +215,13 @@ function parseOrdersDetails (html) {
 
 /**
  * Fetch transaction data from opal.com.au for a specific pagination index
- * 
+ *
  * @param  {Opaler}   opaler
  * @param  {Object}   options
+ * @type   {Number}   options.cardIndex
+ * @type   {Number}   options.pageIndex   Optional
+ * @type   {Number}   options.month       Optional
+ * @type   {Number}   options.year        Optional
  * @param  {Function} cb
  */
 function getTransactionPageSingle (opaler, options, cb) {
@@ -247,9 +253,9 @@ function getTransactionPageSingle (opaler, options, cb) {
 }
 
 /**
- * Walk through all transaction pages on opal.com.au and call 
+ * Walk through all transaction pages on opal.com.au and call
  * `getTransactionPageSingle` to fetch the data for every pagination index
- * 
+ *
  * @param  {Opaler}   opaler
  * @param  {Object}   options
  * @param  {Function} cb
@@ -274,8 +280,8 @@ function getTransactionPageAll (opaler, options, cb) {
  * Check if pathname starts with /login to determinate if the url request
  * redirected to the login page and thus needs authorization
  *
- * @param  {string} pathname
- * @return {bool}
+ * @param  {String} pathname
+ * @return {Boolean}
  */
 function authorizationNeeded (pathname) {
   if (/^\/login/.test(pathname)) {
@@ -294,7 +300,7 @@ var Opaler = module.exports = function Opaler (username, password) {
 /**
  * Authorize via login post against opal website
  *
- * @param  {function} cb callback
+ * @param  {Function} cb
  */
 Opaler.prototype.authorize = function authorize (cb) {
   var params, url;
@@ -320,8 +326,8 @@ Opaler.prototype.authorize = function authorize (cb) {
 /**
  * Get request wrapper for requests against opal website
  *
- * @param  {object}   reqObj {url: '', param: {}}
- * @param  {function} cb     callback
+ * @param  {Object}   reqObj {url: '', param: {}}
+ * @param  {Function} cb
  */
 Opaler.prototype.getRequest = function getRequest (reqObj, cb) {
   var url, param;
@@ -356,7 +362,7 @@ Opaler.prototype.getRequest = function getRequest (reqObj, cb) {
 /**
  * Get opal card information as JSON
  *
- * @param  {function} cb callback
+ * @param  {Function} cb
  */
 Opaler.prototype.getCards = function (cb) {
   return new Promise(function (resolve, reject) {
@@ -384,7 +390,7 @@ Opaler.prototype.getCards = function (cb) {
 /**
  * Fetch user details from website
  *
- * @param  {function} cb callback
+ * @param  {Function} cb
  */
 Opaler.prototype.getAccount = function (cb) {
   return new Promise(function (resolve, reject) {
@@ -409,7 +415,7 @@ Opaler.prototype.getAccount = function (cb) {
 /**
  * Fetch orders details from website
  *
- * @param  {function} cb callback
+ * @param  {Function} cb
  */
 Opaler.prototype.getOrders = function (cb) {
   return new Promise(function (resolve, reject) {
@@ -434,13 +440,12 @@ Opaler.prototype.getOrders = function (cb) {
 /**
  * Fetch transaction data from website
  *
- * @param  {Object}   options {
- *                              month: Number,
- *                              year: Number,
- *                              cardIndex: Number,
- *                              pageIndex: Number
- *                             }
- * @param  {function} cb       callback
+ * @param  {Object}   options
+ * @param  {Number}   options.month
+ * @param  {Number}   options.year
+ * @param  {Number}   options.cardIndex
+ * @param  {Number}   options.pageIndex
+ * @param  {function} cb
  */
 Opaler.prototype.getTransactions = function (options, cb) {
   options = options || {};
