@@ -1,153 +1,159 @@
 Get information for your opal card account.  
 https://www.opal.com.au/
 
-## Install
+### Install
 
 ```
 npm install opaler
 ```
 
-## getCards([Callback])
+### `getCards(): Promise<Card[]>`
 
 Usage
 
 ```javascript
 var opaler = new Opaler('username', 'password123');
 
-// Promise
-opaler.getCardInfo().then(function (result) {
-  console.log(result);
-});
-
-// Callback
-opaler.getCardInfo(function (err, result) {
+opaler.getCards().then(result => {
   console.log(result);
 });
 ```
 
-Result `Array`
+Result `Card[]`
 
 ```javascript
 [{
-  cardNumber: String
-  displayCardNumber: {Unknown}
-  fareCategoryCode: {Unknown}
-  fareCategoryTitle: {Unknown}
-  cardNickName: String,
-  cardState: String,
-  cardBalance: Number,
-  active: Boolean,
-  svPending: Number,
-  toBeActivated: Boolean,
-  displayName: String,
-  cardIndex: Number,
-  currentCardBalance: Number
+  cardNumber: string,
+  displayCardNumber: null,
+  fareCategoryCode: null,
+  fareCategoryTitle: null,
+  cardNickName: string,
+  cardState: string,
+  cardBalance: number,
+  active: boolean,
+  svPending: number,
+  toBeActivated: boolean,
+  displayName: string,
+  cardIndex: number,
+  currentCardBalance: number,
 },
 ...]
 ```
 
-## getAccount([Callback])
+### `getAccount(): Promise<Account>`
 
 Usage
 
 ```javascript
 var opaler = new Opaler('username', 'password123');
 
-// Promise
-opaler.getUserDetails().then(function (result) {
-  console.log(result);
-});
-
-// Callback
-opaler.getUserDetails(function (err, result) {
+opaler.getAccount().then(result => {
   console.log(result);
 });
 ```
 
-Result `Object`
+Result `Account`
 
 ```javascript
 {
-  firstName: String,
-  lastName: String,
-  address: Array,
-  dateOfBirth: String,
-  phoneNumber: String,
-  mobileNumber: String,
-  emailAddress: String,
-  nameOnCard: String,
-  cardType: String,
-  cardNumber: String,
-  cardExpires: String,
-  ...
+  firstName: string,
+  lastName: string,
+  address: string,
+  dateOfBirth: string,
+  phoneNumber: string,
+  mobileNumber: string,
+  emailAddress: string,
+  nameOnCard: string,
+  cardType: string,
+  cardNumber: string,
+  cardExpires: string,
+  password: string,
+  opalPin: string,
+  securityQuestion: string,
+  securityAnswer: string,
 }
 ```
 
-The properties of the result may vary because the method camelcasifies the rows names of the table shown on the opal.com.au webpage and uses them as the objects key names.
+### `getOrders(): Promise<Order[]>`
 
-## getTransactions(Options, [Callback])
+Usage
+
+```javascript
+var opaler = new Opaler('username', 'password123');
+
+opaler.getOrders().then(function(result) {
+  console.log(result);
+});
+```
+
+Result `Order[]`
+
+```
+[{
+  orderId: string,
+  orderDate: string,
+  orderDateTimestamp: number,
+  cardType: string,
+  orderStatus: string,
+},
+...]
+```
+
+### `getTransactions(options: TransactionRequestOptions): Promise<Transaction[]>`
 
 Options
 
 ```javascript
 {
-  cardIndex: Number,
-  [month: Number],
-  [year: Number,
-  [pageIndex: Number]
+  month?: number,
+  year?: number,
+  pageIndex?: number,
+  cardIndex: number,
 }
 ```
 
 `pageIndex`, `month` and `year` are optional.  
-If no `pageIndex` is set all pages will be fetched.
+If no `pageIndex` is set all available pages will be fetched.
 
 Usage
 
 ```javascript
 var opaler = new Opaler('username', 'password123');
 
-// Promise
-opaler.getCardTransactions({
-  cardIndex: 0,
-  pageIndex: 1
-}).then(function (result) {
-  console.log(result);
-});
-
-// Callback
-opaler.getCardTransactions({
-  cardIndex: 0,
-  pageIndex: 1
-}, function (err, result) {
-  console.log(result);
-});
+opaler
+  .getTransactions({
+    cardIndex: 0,
+    pageIndex: 1,
+  })
+  .then(function(result) {
+    console.log(result);
+  });
 ```
 
-Result `Array`
+Result `Transaction[]`
 
 ```javascript
 [{
-  transactionNumber: String,
-  timestamp: Number,
-  summary: String,
-  mode: String (ferry|bus|train),
-  fare: { 
-    applied: Number,
-    price: Number,
-    discount: Number,
-    paid: Number
+  transactionNumber: number,
+  timestamp: number,
+  summary: string | null,
+  mode: string | null,
+  fare: {
+    applied: string | null,
+    price: number,
+    discount: number,
+    paid: number,
   },
   journey: {
-    number: Number,
-    start: String,
-    end: String
-  }
+    number: number,
+    start: string,
+    end: string,
+  } | null,
 },
 ...]
-
 ```
 
-# License
+### License
 
 (MIT License)
 

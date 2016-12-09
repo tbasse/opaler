@@ -1,13 +1,43 @@
 {
   "name": "opaler",
-  "version": "0.2.4",
-  "description": "Retrieve information about your opal card.",
+  "version": "1.2.0",
+  "description": "Request your opal card data from opal.com.au.",
   "author": "tgdb77@gmail.com",
   "license": "MIT",
-  "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tbasse/opaler.git"
+  },
+  "engines": {
+    "node": ">= 8"
+  },
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "types": "tsc --noEmit",
+    "test": "jest --config jestconfig.json",
+    "lint": "yarn lint:ts && yarn lint:prettier",
+    "lint:fix": "yarn lint:js:fix && yarn lint:ts:fix && yarn lint:prettier:fix",
+    "lint:ts": "tslint -p tsconfig.json -t stylish 'src/**/*.ts'",
+    "lint:ts:fix": "yarn lint:ts -- --fix",
+    "lint:prettier": "prettier --list-different 'src/**/*.ts'",
+    "lint:prettier:fix": "prettier --write 'src/**/*.ts'"
+  },
   "dependencies": {
-    "bluebird": "^2.3.2",
-    "cheerio": "^0.17.0",
-    "request": "^2.37.0"
+    "cheerio": "^1.0.0-rc.2",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.10",
+    "@types/jest": "^23.3.10",
+    "@types/request": "^2.48.1",
+    "jest": "^23.6.0",
+    "prettier": "^1.15.3",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.12.0",
+    "tslint-config-prettier": "^1.17.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.2.2"
   }
 }

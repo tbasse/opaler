@@ -1,0 +1,28 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-eslint-rules",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "array-type": [true, "array"],
+    "curly": true,
+    "interface-name": [true, "never-prefix"],
+    "member-access": [true, "no-public"],
+    "no-any": true,
+    "no-require-imports": true,
+    "no-shadowed-variable": true,
+    "no-switch-case-fall-through": true,
+    "no-unused-expression": true,
+    "no-var-keyword": true,
+    "no-var-requires": true,
+    "prefer-switch": { "severity": "warning" },
+    "switch-default": true,
+
+    "max-classes-per-file": false,
+    "member-ordering": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "triple-equals": [true, "allow-null-check"]
+  }
+}
