@@ -1,9 +1,10 @@
-.vscode
-example
-src
 .gitignore
 .prettierrc
+.travis.yml
+.vscode
+example
 jestconfig.json
+src
 tsconfig.json
 tslint.json
 yarn.lock
