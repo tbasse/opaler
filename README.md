@@ -1,6 +1,8 @@
 Get information for your opal card account.  
 https://www.opal.com.au/
 
+[![Build Status](https://travis-ci.org/tbasse/opaler.svg?branch=master)](https://travis-ci.org/tbasse/opaler)
+
 ### Install
 
 ```
