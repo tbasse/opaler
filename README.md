@@ -5,7 +5,7 @@
 Retrieve and parse information from your opal card account.  
 [https://www.opal.com.au/](https://www.opal.com.au/)
 
-Opal cards are smartcard tickets that you keep, reload and reuse to pay for travel on public transport in the greater Sydney area of New South Wales, Australia.  
+Opal cards are smartcard tickets that you keep, reload and reuse to pay for travel on public transport in the greater Sydney area of New South Wales, Australia.
 
 ## Getting Started
 
@@ -31,7 +31,7 @@ opaler.getCards().then(cards => {
 
 ## API
 
-### #getCards(): Promise<Card[]>
+### `#getCards(): Promise<Card[]>`
 
 **`Card`**
 ```typescript
@@ -52,7 +52,7 @@ opaler.getCards().then(cards => {
 }
 ```
 
-### #getAccount(): Promise<Account>
+### `#getAccount(): Promise<Account>`
 
 **`Account`**
 ```typescript
@@ -75,7 +75,7 @@ opaler.getCards().then(cards => {
 }
 ```
 
-### #getOrders(): Promise<Order[]>
+### `#getOrders(): Promise<Order[]>`
 
 **`Order`**
 ```typescript
@@ -88,7 +88,7 @@ opaler.getCards().then(cards => {
 }
 ```
 
-### #getTransactions(options: TransactionRequestOptions): Promise<Transaction[]>
+### `#getTransactions(options: TransactionRequestOptions): Promise<Transaction[]>`
 
 **`TransactionRequestOptions`**
 ```typescript
