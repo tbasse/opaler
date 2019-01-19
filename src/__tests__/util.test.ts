@@ -9,6 +9,7 @@ test('#parseScrapedText()', () => {
 });
 
 test('#camelCaseify()', () => {
+  expect(util.camelCaseify('nodelimiter', '')).toBe('nodelimiter');
   expect(util.camelCaseify('camel case', ' ')).toBe('camelCase');
   expect(util.camelCaseify('camel_case', '_')).toBe('camelCase');
   expect(util.camelCaseify('CAMEL_CASE', '_')).toBe('camelCase');
@@ -16,6 +17,10 @@ test('#camelCaseify()', () => {
 });
 
 test('#dollarToInt()', () => {
+  // without dollar sign
+  expect(util.dollarToInt('-1.00')).toBe(-100);
+  expect(util.dollarToInt('1.00')).toBe(100);
+  // with dollar sign
   expect(util.dollarToInt('-$1.00')).toBe(-100);
   expect(util.dollarToInt('$12.34')).toBe(1234);
   expect(util.dollarToInt('$12.3456')).toBe(1234);
@@ -31,6 +36,7 @@ test('#parseTransactionMode()', () => {
       '<img class="fancyPicture" alt="ferry" src="/test.jpg" />',
     ),
   ).toBe('ferry');
+
   expect(
     util.parseTransactionMode(
       '<img class="fancyPicture" alt="foobar" src="/test.jpg" />',
@@ -39,7 +45,7 @@ test('#parseTransactionMode()', () => {
 });
 
 test('#parseTransactionDate()', () => {
-  expect(util.parseTransactionDate('18/02/1977 12:32')).toBe(225077520);
+  expect(util.parseTransactionDate('18/02/1977 13:37')).toBe(225081420);
 });
 
 test('#authorizationNeeded()', () => {
