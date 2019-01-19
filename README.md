@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/tbasse/opaler.svg?branch=master)](https://travis-ci.org/tbasse/opaler) [![npm version](https://badge.fury.io/js/opaler.svg)](https://badge.fury.io/js/opaler) ![License](https://img.shields.io/npm/l/opaler.svg)
+[![Build Status](https://travis-ci.org/tbasse/opaler.svg?branch=master)](https://travis-ci.org/tbasse/opaler) [![npm version](https://badge.fury.io/js/opaler.svg)](https://www.npmjs.com/package/opaler) [![License](https://img.shields.io/npm/l/opaler.svg)](https://tldrlegal.com/license/mit-license)
 
 # Opaler
 
