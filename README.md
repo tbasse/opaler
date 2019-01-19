@@ -1,30 +1,41 @@
-Get information for your opal card account.  
-https://www.opal.com.au/
+[![Build Status](https://travis-ci.org/tbasse/opaler.svg?branch=master)](https://travis-ci.org/tbasse/opaler) [![npm version](https://badge.fury.io/js/opaler.svg)](https://badge.fury.io/js/opaler) [![License](https://img.shields.io/npm/l/opaler.svg)]
 
-[![Build Status](https://travis-ci.org/tbasse/opaler.svg?branch=master)](https://travis-ci.org/tbasse/opaler)
+# Opaler
 
-### Install
+Retrieve and parse information from your opal card account.  
+[https://www.opal.com.au/](https://www.opal.com.au/)
 
-```
+Opal cards are smartcard tickets that you keep, reload and reuse to pay for travel on public transport in the greater Sydney area of New South Wales, Australia.  
+
+## Getting Started
+
+### Installing
+
+```bash
 npm install opaler
 ```
 
-### `getCards(): Promise<Card[]>`
+### Usage
 
-Usage
+```typescript
+import Opaler from 'opaler';
 
-```javascript
-var opaler = new Opaler('username', 'password123');
+const opaler = new Opaler('YOUR_USERNAME', 'YOUR_PASSWORD');
 
-opaler.getCards().then(result => {
-  console.log(result);
+opaler.getCards().then(cards => {
+  cards.forEach(card => {
+    console.log(JSON.stringify(card, null, 2));
+  })
 });
 ```
 
-Result `Card[]`
+## API
 
-```javascript
-[{
+### #getCards(): Promise<Card[]>
+
+**`Card`**
+```typescript
+{
   cardNumber: string,
   displayCardNumber: null,
   fareCategoryCode: null,
@@ -38,25 +49,13 @@ Result `Card[]`
   displayName: string,
   cardIndex: number,
   currentCardBalance: number,
-},
-...]
+}
 ```
 
-### `getAccount(): Promise<Account>`
+### `#getAccount(): Promise<Account>`
 
-Usage
-
-```javascript
-var opaler = new Opaler('username', 'password123');
-
-opaler.getAccount().then(result => {
-  console.log(result);
-});
-```
-
-Result `Account`
-
-```javascript
+**`Account`**
+```typescript
 {
   firstName: string,
   lastName: string,
@@ -76,36 +75,23 @@ Result `Account`
 }
 ```
 
-### `getOrders(): Promise<Order[]>`
+### #getOrders(): Promise<Order[]>
 
-Usage
-
-```javascript
-var opaler = new Opaler('username', 'password123');
-
-opaler.getOrders().then(function(result) {
-  console.log(result);
-});
-```
-
-Result `Order[]`
-
-```
-[{
+**`Order`**
+```typescript
+{
   orderId: string,
   orderDate: string,
   orderDateTimestamp: number,
   cardType: string,
   orderStatus: string,
-},
-...]
+}
 ```
 
-### `getTransactions(options: TransactionRequestOptions): Promise<Transaction[]>`
+### #getTransactions(options: TransactionRequestOptions): Promise<Transaction[]>
 
-Options
-
-```javascript
+**`TransactionRequestOptions`**
+```typescript
 {
   month?: number,
   year?: number,
@@ -114,28 +100,15 @@ Options
 }
 ```
 
-`pageIndex`, `month` and `year` are optional.  
-If no `pageIndex` is set all available pages will be fetched.
+- `month` and `year` can be used to request transactions for a specific time
+- `pageIndex` requests a certain page inside the result set
+if no `pageIndex` is set all pages will be fetched continously. Depending on your result size this can take quite a while and is not recommended.
+- `cardIndex` refers to the cards index number within the Card[] array returned from #getCards()
 
-Usage
 
-```javascript
-var opaler = new Opaler('username', 'password123');
-
-opaler
-  .getTransactions({
-    cardIndex: 0,
-    pageIndex: 1,
-  })
-  .then(function(result) {
-    console.log(result);
-  });
-```
-
-Result `Transaction[]`
-
-```javascript
-[{
+**`Transaction`**
+```typescript
+{
   transactionNumber: number,
   timestamp: number,
   summary: string | null,
@@ -151,18 +124,23 @@ Result `Transaction[]`
     start: string,
     end: string,
   } | null,
-},
-...]
+
 ```
 
-### License
+## Versioning
 
-(MIT License)
+Opaler uses [Semantic Versioning](http://semver.org/) for versioning.  
+For the versions available, see the [the published versions on npmjs.com](https://www.npmjs.com/package/opaler). 
 
-Copyright (c) 2014 Thorsten Basse thorsten@tgdb.io
+## License
+
+[MIT License](https://tldrlegal.com/license/mit-license)
+
+Copyright (c) 2014 Thorsten Basse
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
