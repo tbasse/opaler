@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/tbasse/opaler.svg?branch=master)](https://travis-ci.org/tbasse/opaler) [![npm version](https://badge.fury.io/js/opaler.svg)](https://badge.fury.io/js/opaler) [![License](https://img.shields.io/npm/l/opaler.svg)]
+[![Build Status](https://travis-ci.org/tbasse/opaler.svg?branch=master)](https://travis-ci.org/tbasse/opaler) [![npm version](https://badge.fury.io/js/opaler.svg)](https://badge.fury.io/js/opaler) ![License](https://img.shields.io/npm/l/opaler.svg)
 
 # Opaler
 
@@ -52,7 +52,7 @@ opaler.getCards().then(cards => {
 }
 ```
 
-### `#getAccount(): Promise<Account>`
+### #getAccount(): Promise<Account>
 
 **`Account`**
 ```typescript
