@@ -2,7 +2,7 @@
 .prettierrc
 .travis.yml
 .vscode
-example
+debug
 jestconfig.json
 src
 tsconfig.json

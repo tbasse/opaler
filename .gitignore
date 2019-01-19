@@ -1,4 +1,4 @@
 .vscode/
-node_modules/
+debug/
 lib/
-example/*.local.*
+node_modules/
