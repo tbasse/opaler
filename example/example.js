@@ -1,65 +1,31 @@
-'use strict';
-/* eslint-disable no-console */
+var Opaler = require('../lib/index.js').default;
 
-var Opal = require('../lib/index.js');
+const opalUsername = 'YOUR_USERNAME';
+const opalPassword = 'YOUR_PASSWORD';
 
-var opalUsername = '';
-var opalPassword = '';
+const opal = new Opaler(opalUsername, opalPassword);
 
-var opal = new Opal(opalUsername, opalPassword);
-
-function getOverallFares(transactions) {
-  var overallJourneys = 0,
-    overallPrice = 0,
-    overallDiscount = 0,
-    overallPaid = 0;
-  transactions.forEach(function(transaction) {
-    if (transaction.journey) {
-      overallJourneys += 1;
-      overallPrice += transaction.fare.price;
-      overallDiscount += transaction.fare.discount;
-      overallPaid += transaction.fare.paid;
-    }
-  });
-
-  return {
-    overallJourneys: overallJourneys,
-    overallPrice: overallPrice,
-    overallDiscount: overallDiscount,
-    overallPaid: overallPaid,
-  };
-}
-
-// Get Card Information
 opal
   .getCards()
-  .then(function(data) {
-    console.log(data);
-    console.log('');
-
-    return opal.getAccount();
-  })
-  .then(function(data) {
-    console.log(data);
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
-
-// Get Transactions
-var fnArray = [opal.getTransactions({ cardIndex: 0, pageIndex: 1 })];
-
-Promise.all(fnArray)
-  .then(function(data) {
-    return data.reduce(function(a, b) {
-      return a.concat(b);
+  .then(cards => {
+    cards.forEach(card => {
+      console.log(JSON.stringify(card, null, 2));
     });
   })
-  .then(function(data) {
-    console.log(JSON.stringify(data, null, 2));
-    var overall = getOverallFares(data);
-    console.log(JSON.stringify(overall, null, 2));
+  .catch(error => {
+    console.error(error);
+  });
+
+opal
+  .getTransactions({
+    cardIndex: 0,
+    pageIndex: 1
   })
-  .catch(function(err) {
-    console.error(err);
+  .then(data => {
+    data.forEach(transaction => {
+      console.log(JSON.stringify(transaction, null, 2));
+    });
+  })
+  .catch(error => {
+    console.error(error);
   });
