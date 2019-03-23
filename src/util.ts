@@ -1,6 +1,31 @@
 import * as cheerio from 'cheerio';
 import { Order, Account, CardReponse, Card, Transaction } from './types';
 
+const dateParseRegex = {
+  order: {
+    regex: /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/,
+    replacement: '$3-$2-$1',
+  },
+  transaction: {
+    regex: /^.*?(\d{2})\/(\d{2})\/(\d{4}).*?(\d{2}):(\d{2}).*?$/,
+    replacement: '$3-$2-$1 $4:$5',
+  },
+};
+
+export const parseDate = (
+  dateString: string,
+  mode: 'order' | 'transaction',
+): number => {
+  if (!dateParseRegex[mode]) {
+    throw new Error(`Unknown mode '${mode}' in parseDate.`);
+  }
+
+  const { regex, replacement } = dateParseRegex[mode];
+  const date = new Date(dateString.replace(regex, replacement));
+
+  return Math.floor(date.getTime() / 1000);
+};
+
 /**
  * Map month numbers from 1-12 to 0-11 and return -1 for everything else
  *
@@ -30,7 +55,7 @@ export const parseScrapedText = (html: string): string => {
 };
 
 /**
- * Camelcaseify a given string and remove all non alphabetical characters
+ * Camelcaseify a given string and remove all non a-z characters
  * @internal
  */
 export const camelCaseify = (
@@ -73,13 +98,8 @@ export const dollarToInt = (dollarString: string | null): number => {
  *
  * @internal
  */
-export const parseOrdersDate = (orderDateString: string): number => {
-  const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
-  const replacement = '$3-$2-$1';
-  const date = new Date(orderDateString.replace(regex, replacement));
-
-  return Math.floor(date.getTime() / 1000);
-};
+export const parseOrdersDate = (orderDateString: string): number =>
+  parseDate(orderDateString, 'order');
 
 /**
  * Parse transaction mode (ferry, bus, train) from the info tables image tag
@@ -99,13 +119,8 @@ export const parseTransactionMode = (
  *
  * @internal
  */
-export const parseTransactionDate = (transactionDate: string): number => {
-  const regex = /^.*?(\d{2})\/(\d{2})\/(\d{4}).*?(\d{2}):(\d{2}).*?$/;
-  const replacement = '$3-$2-$1 $4:$5';
-  const date = new Date(transactionDate.replace(regex, replacement));
-
-  return Math.floor(date.getTime() / 1000);
-};
+export const parseTransactionDate = (transactionDate: string): number =>
+  parseDate(transactionDate, 'transaction');
 
 /**
  * Parse cardinfo array and convert currency strings to numbers

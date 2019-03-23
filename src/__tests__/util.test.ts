@@ -2,6 +2,28 @@ import * as util from '../util';
 import * as cards from './mocks/card-details';
 import * as activity from './mocks/card-activity';
 
+test('#parseDate()', () => {
+  expect(util.parseDate('18/02/1977', 'order')).toBe(225072000);
+  expect(util.parseDate('18/02/1977', 'order')).toBe(
+    util.parseOrdersDate('18/02/1977'),
+  );
+  expect(util.parseDate('18/02/1977 13:37', 'transaction')).toBe(225081420);
+  expect(util.parseDate('18/02/1977 13:37', 'transaction')).toBe(
+    util.parseTransactionDate('18/02/1977 13:37'),
+  );
+  // @ts-ignore
+  expect(() => util.parseDate('18/02/1977 13:37', 'unknown')).toThrow();
+});
+
+test('#mapMonthsToZeroBased()', () => {
+  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(month => {
+    expect(util.mapMonthsToZeroBased(month)).toBe(month - 1);
+  });
+  [0, -2, NaN, 13, 271, Infinity].map(month => {
+    expect(util.mapMonthsToZeroBased(month)).toBe(-1);
+  });
+});
+
 test('#parseScrapedText()', () => {
   expect(util.parseScrapedText('string')).toBe('string');
   expect(util.parseScrapedText('string<br>string')).toBe('string\nstring');
@@ -24,6 +46,8 @@ test('#dollarToInt()', () => {
   expect(util.dollarToInt('-$1.00')).toBe(-100);
   expect(util.dollarToInt('$12.34')).toBe(1234);
   expect(util.dollarToInt('$12.3456')).toBe(1234);
+  expect(util.dollarToInt('$12')).toBe(NaN);
+  expect(util.dollarToInt('NotADollarAmount')).toBe(NaN);
 });
 
 test('#parseOrdersDate()', () => {
@@ -42,6 +66,10 @@ test('#parseTransactionMode()', () => {
       '<img class="fancyPicture" alt="foobar" src="/test.jpg" />',
     ),
   ).toBe('foobar');
+
+  expect(
+    util.parseTransactionMode('<img class="fancyPicture" src="/test.jpg" />'),
+  ).toBe(null);
 });
 
 test('#parseTransactionDate()', () => {
@@ -63,9 +91,19 @@ describe('#parseCardInfo()', () => {
   test('balance negative', () => {
     expect(util.parseCardInfo(cards.card2.string)).toEqual(cards.card2.json);
   });
+
+  test('invalid json', () => {
+    expect(() => util.parseCardInfo('nope')).toThrow();
+  });
 });
 
 describe('#parseTransactions()', () => {
+  test('no activity', () => {
+    expect(
+      util.parseTransactions(activity.getTableHtml(activity.htmlNoActivity)),
+    ).toEqual([]);
+  });
+
   test('fare standard', () => {
     expect(
       util.parseTransactions(activity.getTableHtml(activity.htmlFareDefault)),

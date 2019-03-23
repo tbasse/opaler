@@ -5,6 +5,9 @@ export const getTableHtml = (acitvityHtml: string | string[]): string => {
   }</tbody></table>`;
 };
 
+export const htmlNoActivity =
+  '<tr><td>2388</td><td class="no-activity-list">Tue<br>10/07/2018<br>09:43</td></tr>';
+
 export const htmlTopup =
   '<tr><td>2388</td><td class="date-time">Tue<br>10/07/2018<br>09:43</td><td class="center"></td><td lang="en-gb" class="transaction-summary hyphenate">Auto top up - Wynyard</td><td class="center"></td><td></td><td class="right nowrap"></td><td class="right nowrap"></td><td class="right nowrap">$40.00</td></tr>';
 
