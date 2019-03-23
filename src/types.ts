@@ -1,3 +1,21 @@
+import * as request from 'request';
+
+/**
+ * @internal
+ */
+export interface PrivateTransactionReqOpts {
+  month: number;
+  year: number;
+  pageIndex: number | null;
+  cardIndex: number;
+  ts: number;
+}
+
+/**
+ * @internal
+ */
+export type Callback = (error: Error | null, body?: request.Response['body']) => void;
+
 interface BaseCard {
   cardNumber: string;
   displayCardNumber: null;

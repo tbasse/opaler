@@ -1,22 +1,14 @@
 import * as request from 'request';
 import * as util from './util';
 import {
+  Callback,
+  PrivateTransactionReqOpts,
   Card,
   Order,
   TransactionRequestOptions,
   Account,
   Transaction,
 } from './types';
-
-type Callback = (error: Error | null, body?: request.Response['body']) => void;
-
-interface PrivateTransactionReqOpts {
-  month: number;
-  year: number;
-  pageIndex: number | null;
-  cardIndex: number;
-  ts: number;
-}
 
 class Opaler {
   constructor(username: string, password: string) {
