@@ -12,6 +12,11 @@ const dateParseRegex = {
   },
 };
 
+/**
+ * Internal generalized parseDate function
+ *
+ * @internal
+ */
 export const parseDate = (
   dateString: string,
   mode: 'order' | 'transaction',
@@ -162,9 +167,8 @@ export const parseCardInfo = (cardDetailsString: string): Card[] => {
  *
  * @internal
  */
-export const sanitizeSummaryString = (summary: string): string => {
-  return summary.replace(/&#xAD;/g, '');
-};
+export const sanitizeSummaryString = (summary: string): string =>
+  summary.replace(/&#xAD;/g, '');
 
 /**
  * Parse card transaction HTML table to return an data object
@@ -182,7 +186,6 @@ export const parseTransactions = (html: string): Transaction[] => {
 
   $('#transaction-data tbody tr').each((rowIndex, tableRow) => {
     const cells: string[] = [];
-    let journeyData;
 
     $(tableRow)
       .find('td')
@@ -217,7 +220,7 @@ export const parseTransactions = (html: string): Transaction[] => {
     };
 
     if (dataJson.mode && /^(ferry|bus|train)$/.test(dataJson.mode)) {
-      journeyData = dataJson.summary!.split(' to ');
+      const journeyData = dataJson.summary!.split(' to ');
       if (journeyData.length === 2) {
         dataJson.journey! = {
           number: parseInt(journey, 10),
