@@ -128,11 +128,11 @@ class Opaler {
 
       if (typeof body !== 'string') {
         return cb(new Error('Response must be of type string'));
+      } else {
+        const data = util.parseTransactions(body);
+
+        return cb(null, data);
       }
-
-      const data = util.parseTransactions(body as string);
-
-      return cb(null, data);
     });
   }
 
