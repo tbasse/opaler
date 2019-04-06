@@ -19,7 +19,7 @@ opal
 opal
   .getTransactions({
     cardIndex: 0,
-    pageIndex: 1
+    pageIndex: 1,
   })
   .then(data => {
     data.forEach(transaction => {
