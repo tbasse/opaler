@@ -83,20 +83,10 @@ export const camelCaseify = (
  *
  * @internal
  */
-export const dollarToInt = (dollarString: string | null): number => {
-  if (!dollarString) {
-    return 0;
-  }
-  const array = dollarString.match(/^(-|\+)?[^\d]?(\d{1,2}\.\d{1,2})/);
-
-  if (!array) {
-    return NaN;
-  }
-  const sign = array[1] || '';
-  const value = array[2];
-
-  return Math.round(parseFloat(sign + value) * 100);
-};
+export const dollarToInt = (dollarString: string | null): number =>
+  !dollarString
+    ? 0
+    : Math.trunc(parseFloat(dollarString.replace('$', '')) * 100);
 
 /**
  * Parse orders date to unix timestamp

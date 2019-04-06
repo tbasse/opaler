@@ -40,13 +40,16 @@ test('#camelCaseify()', () => {
 
 test('#dollarToInt()', () => {
   // without dollar sign
-  expect(util.dollarToInt('-1.00')).toBe(-100);
-  expect(util.dollarToInt('1.00')).toBe(100);
+  expect(util.dollarToInt('-2.20')).toBe(-220);
+  expect(util.dollarToInt('2.20')).toBe(220);
   // with dollar sign
-  expect(util.dollarToInt('-$1.00')).toBe(-100);
+  expect(util.dollarToInt('$1')).toBe(100);
+  expect(util.dollarToInt('$20')).toBe(2000);
+  expect(util.dollarToInt('-$2.20')).toBe(-220);
+  expect(util.dollarToInt('$2.20')).toBe(220);
   expect(util.dollarToInt('$12.34')).toBe(1234);
   expect(util.dollarToInt('$12.3456')).toBe(1234);
-  expect(util.dollarToInt('$12')).toBe(NaN);
+  expect(util.dollarToInt('$12')).toBe(1200);
   expect(util.dollarToInt('NotADollarAmount')).toBe(NaN);
 });
 
