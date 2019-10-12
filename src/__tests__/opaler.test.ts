@@ -9,78 +9,80 @@ jest.mock('request', () => ({
   post: jest.fn().mockImplementation(() => request.post),
 }));
 
-test('#Opaler', () => {
-  const opaler = new Opaler('user', 'password');
+describe('Opaler', () => {
+  test('constructor', () => {
+    const opaler = new Opaler('user', 'password');
 
-  // tslint:disable no-string-literal
-  expect(opaler['username']).toBe('user');
-  expect(opaler['password']).toBe('password');
-  expect(opaler['baseurl']).toBe('https://www.opal.com.au');
-  expect(opaler['cookie']).toBe(request.jar);
-  // tslint:enable no-string-literal
-});
+    // tslint:disable no-string-literal
+    expect(opaler['username']).toBe('user');
+    expect(opaler['password']).toBe('password');
+    expect(opaler['baseurl']).toBe('https://www.opal.com.au');
+    expect(opaler['cookie']).toBe(request.jar);
+    // tslint:enable no-string-literal
+  });
 
-test('#getAccount()', () => {
-  const opaler = new Opaler('user', 'password');
-  opaler.getAccount();
+  test('#getAccount()', () => {
+    const opaler = new Opaler('user', 'password');
+    opaler.getAccount();
 
-  expect(request.get).toBeCalledWith(
-    'https://www.opal.com.au/registered/my-details/',
-    expect.any(Object),
-    expect.any(Function),
-  );
-});
+    expect(request.get).toBeCalledWith(
+      'https://www.opal.com.au/registered/my-details/',
+      expect.any(Object),
+      expect.any(Function),
+    );
+  });
 
-test('#authorize()', () => {
-  const opaler = new Opaler('user', 'password');
-  const cb = jest.fn();
-  // tslint:disable-next-line no-string-literal
-  opaler['authorize'](cb);
+  test('#authorize()', () => {
+    const opaler = new Opaler('user', 'password');
+    const cb = jest.fn();
+    // tslint:disable-next-line no-string-literal
+    opaler['authorize'](cb);
 
-  expect(request.post).toBeCalledWith(
-    'https://www.opal.com.au/login/registeredUserUsernameAndPasswordLogin',
-    {
-      form: {
-        attempt: '',
-        h_password: 'password',
-        h_username: 'user',
-        submit: 'Log in',
+    expect(request.post).toBeCalledWith(
+      'https://www.opal.com.au/login/registeredUserUsernameAndPasswordLogin',
+      {
+        form: {
+          attempt: '',
+          h_password: 'password',
+          h_username: 'user',
+          submit: 'Log in',
+        },
+        jar: request.jar,
       },
-      jar: request.jar,
-    },
-    expect.any(Function),
-  );
-});
+      expect.any(Function),
+    );
+  });
 
-test('#getRequest()', () => {
-  const opaler = new Opaler('user', 'password');
-  // tslint:disable-next-line no-string-literal
-  opaler['getRequest']('https://www.opal.com.au/some/path', () => null);
+  test('#getRequest()', () => {
+    const opaler = new Opaler('user', 'password');
+    // tslint:disable-next-line no-string-literal
+    opaler['getRequest']('https://www.opal.com.au/some/path', () => null);
 
-  expect(request.get).toBeCalledWith(
-    'https://www.opal.com.au/some/path',
-    { jar: request.jar },
-    expect.any(Function),
-  );
-});
+    expect(request.get).toBeCalledWith(
+      'https://www.opal.com.au/some/path',
+      { jar: request.jar },
+      expect.any(Function),
+    );
+  });
 
-test('#getTransactionsSinglePage()', () => {
-  const opaler = new Opaler('user', 'password');
-  // tslint:disable-next-line no-string-literal
-  opaler['getTransactionsSinglePage'](
-    {
-      month: 1,
-      year: 2018,
-      pageIndex: 1,
-      cardIndex: 1,
-      ts: 1234,
-    },
-    () => null,
-  );
+  test('#getTransactionsSinglePage()', () => {
+    const opaler = new Opaler('user', 'password');
+    // tslint:disable-next-line no-string-literal
+    opaler['getTransactionsSinglePage'](
+      {
+        month: 1,
+        year: 2018,
+        pageIndex: 1,
+        cardIndex: 1,
+        ts: 1234,
+      },
+      () => null,
+    );
 
-  expect(request.get).toBeCalledWith(
-    'https://www.opal.com.au/some/path',
-    { jar: request.jar },
-    expect.any(Function),
-  );
+    expect(request.get).toBeCalledWith(
+      'https://www.opal.com.au/some/path',
+      { jar: request.jar },
+      expect.any(Function),
+    );
+  });
 });

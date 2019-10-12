@@ -1,7 +1,7 @@
 export const card1 = {
   string: JSON.stringify([
     {
-      cardNumber: '1234567891234567',
+      cardNumber: '1234561111111111',
       displayCardNumber: null,
       fareCategoryCode: null,
       fareCategoryTitle: null,
@@ -23,7 +23,7 @@ export const card1 = {
       cardBalance: 1234,
       cardIndex: 0,
       cardNickName: 'my_card',
-      cardNumber: '1234567891234567',
+      cardNumber: '1234561111111111',
       cardState: 'ISSUED',
       currentCardBalance: 1234,
       displayCardNumber: null,
@@ -39,7 +39,7 @@ export const card1 = {
 export const card2 = {
   string: JSON.stringify([
     {
-      cardNumber: '1234567891234567',
+      cardNumber: '1234562222222222',
       displayCardNumber: null,
       fareCategoryCode: null,
       fareCategoryTitle: null,
@@ -61,7 +61,7 @@ export const card2 = {
       cardBalance: 1234,
       cardIndex: 0,
       cardNickName: 'SECOND',
-      cardNumber: '1234567891234567',
+      cardNumber: '1234562222222222',
       cardState: 'ISSUED',
       currentCardBalance: -1234,
       displayCardNumber: null,
