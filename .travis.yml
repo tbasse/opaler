@@ -3,3 +3,13 @@ node_js:
   - '8'
 before_install:
   - export TZ=Australia/Sydney
+before_deploy: 'yarn build'
+deploy:
+  provider: npm
+  email: tgdb77@gmail.com
+  api_key:
+    secure: H20c9BS0rWEp4IlxVKQu5RWTvj7VwXwUnukjPaqs5RieMS/QQKrHBgHSv+XTXqImMvQxOKnIwRMAYmCegs8M3CdBSHueeJPHoEeCVJAQbJiyy7lnHjWsag9omjvtiUQ3v+WyKS0gfVmNWL9O1Wua9X7zNu59A1rM+JehdZWb5v5uDCdSFgamOHvMuzu5WWnIPKASdbSR21lTRb9bTZF4Qk9mFdYykXiEKTuMEhC3+NKeLi9uDMKGsm75sf8F1HNscZDCPcbYhs2EgeaIqMzH400pf0kO/uF/LaMLE+kLFP62teDiyWJrj+UXU1Yo3FEvDIJeSCvCdRSlJ9/bAmh0nVwLhWDzssB5Vi4J6mu+P82uXrXbscttG4lw3fT9R1JOSyZz5/cR7wb1zylbyuqc+h9c+O5ahY9DK2AgLzfFHbezbq+KV5Q2dt8019tK+nYZcUmJAHo7NkzugsQGajknauUWm+AyYOlu8+0VxJwwbQZ9jRb+6olpyO1x+/uwRFGl/crMmPJTkueU39/AzX+qTmE/2hbJpd3rWBKEK1wtY2g05O1JuD8c/926RIwoZHvQXkCVas0NZGIhh9GA2AoU9W48cy3+7YW/1ANUk/3PD++4EA+wM14Tx8gPjOdqyJM+PkVIcp8cEI7UPv5BLXJUweYlEKqpHuVPm6GeMxH2TbE=
+  on:
+    tags: true
+    branch: master
+    repo: tbasse/opaler
