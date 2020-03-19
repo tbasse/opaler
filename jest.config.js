@@ -1,4 +1,6 @@
-{
+process.env.TZ = 'Australia/Sydney';
+
+module.exports = {
   "transform": {
     "^.+\\.ts$": "ts-jest"
   },

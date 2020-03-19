@@ -16,7 +16,7 @@
   "scripts": {
     "build": "rm -rf lib && tsc",
     "types": "tsc --noEmit",
-    "test": "jest --config jestconfig.json",
+    "test": "jest --config jest.config.js",
     "test:watch": "jest --config jestconfig.json --watch --notify",
     "lint": "yarn lint:ts && yarn lint:prettier",
     "lint:fix": "yarn lint:js:fix && yarn lint:ts:fix && yarn lint:prettier:fix",
