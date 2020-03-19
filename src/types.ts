@@ -14,7 +14,10 @@ export interface PrivateTransactionReqOpts {
 /**
  * @internal
  */
-export type Callback = (error: Error | null, body?: request.Response['body']) => void;
+export type Callback = (
+  error: Error | null,
+  body?: request.Response['body'],
+) => void;
 
 interface BaseCard {
   cardNumber: string;
