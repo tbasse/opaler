@@ -4,6 +4,7 @@
 .vscode
 debug
 jestconfig.json
+jest.config.js
 src
 tsconfig.json
 tslint.json
